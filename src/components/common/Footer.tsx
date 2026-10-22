@@ -211,7 +211,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© {new Date().getFullYear()} VoltNex Labs. All rights reserved.</p>
+          <p>© 2026 VoltNex Labs. All rights reserved.</p>
           <p className="flex items-center gap-1.5">
             Designed & Built for makers worldwide. Power Ideas. Build the Future.
           </p>
