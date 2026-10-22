@@ -107,6 +107,17 @@ void setup() {
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 bg-gradient-to-b from-blue-50/60 via-slate-50 to-slate-50 border-b border-slate-200/60 engineering-grid">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
+            {/* Brand Logo Emblem */}
+            <div className="flex justify-center mb-6">
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-white p-1 shadow-2xl shadow-blue-500/25 ring-4 ring-blue-500/15 hover:scale-105 transition-transform duration-300">
+                <img
+                  src="/logo.png"
+                  alt="VoltNex Official Logo"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
+
             {/* Pill Tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-semibold uppercase tracking-wider mb-6 shadow-sm">
               <Zap className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />

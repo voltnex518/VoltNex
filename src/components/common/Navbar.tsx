@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
-  Zap,
   Menu,
   X,
   Search,
@@ -57,8 +56,12 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group focus:outline-none">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
-              <Zap className="w-5 h-5 fill-white text-white" />
+            <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden shadow-md shadow-blue-500/20 ring-1 ring-slate-200/60 group-hover:scale-105 transition-transform duration-200 flex-shrink-0 bg-white">
+              <img
+                src="/logo.png"
+                alt="VoltNex Logo"
+                className="w-full h-full object-contain p-0.5"
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold font-display tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">

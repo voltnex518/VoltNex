@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import {
-  Zap,
   Lock,
   Mail,
   ArrowRight,
@@ -93,8 +92,8 @@ export const AdminLoginPage: React.FC = () => {
         {/* Brand Header */}
         <div className="text-center space-y-3">
           <Link to="/" className="inline-flex items-center gap-2.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-              <Zap className="w-6 h-6 fill-white" />
+            <div className="w-16 h-16 rounded-2xl overflow-hidden bg-white p-1 shadow-xl shadow-blue-500/30 ring-1 ring-slate-700">
+              <img src="/logo.png" alt="VoltNex Logo" className="w-full h-full object-contain" />
             </div>
           </Link>
           <h2 className="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">

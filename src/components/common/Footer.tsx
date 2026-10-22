@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Zap,
   Mail,
   ArrowRight,
   CheckCircle2,
@@ -85,9 +84,13 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-md">
-                <Zap className="w-4 h-4 fill-white" />
+            <Link to="/" className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md ring-1 ring-slate-700/60 bg-white p-0.5 flex-shrink-0">
+                <img
+                  src="/logo.png"
+                  alt="VoltNex Logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="text-xl font-bold font-display text-white">
                 {settings?.site_name || 'VoltNex Labs'}

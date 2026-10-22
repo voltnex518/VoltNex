@@ -9,7 +9,6 @@ import {
   Settings,
   Mail,
   LogOut,
-  Zap,
   Menu,
   X,
   ExternalLink,
@@ -46,8 +45,8 @@ export const AdminLayout: React.FC = () => {
       {/* Mobile Header */}
       <div className="md:hidden bg-slate-900 text-white px-4 py-3 flex items-center justify-between border-b border-slate-800">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
-            <Zap className="w-4 h-4 text-white" />
+          <div className="w-8 h-8 rounded-lg overflow-hidden bg-white p-0.5 shadow-sm flex-shrink-0">
+            <img src="/logo.png" alt="VoltNex Logo" className="w-full h-full object-contain" />
           </div>
           <span className="font-bold text-sm font-display">VoltNex Admin</span>
         </div>
@@ -68,9 +67,9 @@ export const AdminLayout: React.FC = () => {
         <div>
           {/* Logo / Header */}
           <div className="p-6 border-b border-slate-800/80 flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-md">
-                <Zap className="w-4 h-4 fill-white" />
+            <Link to="/" className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden bg-white p-0.5 shadow-md flex-shrink-0">
+                <img src="/logo.png" alt="VoltNex Logo" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h1 className="font-bold text-white text-base tracking-tight font-display">

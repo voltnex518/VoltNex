@@ -76,8 +76,8 @@ export const AboutPage: React.FC = () => {
 
         {/* Creator Profile */}
         <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl flex flex-col md:flex-row items-center gap-8">
-          <div className="w-28 h-28 rounded-2xl bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-slate-950 text-4xl font-black font-display flex-shrink-0 shadow-lg">
-            P
+          <div className="w-28 h-28 rounded-2xl overflow-hidden bg-white p-1.5 flex items-center justify-center flex-shrink-0 shadow-xl ring-2 ring-cyan-400/50">
+            <img src="/logo.png" alt="VoltNex Emblem" className="w-full h-full object-contain" />
           </div>
           <div className="space-y-3 flex-1 text-center md:text-left">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400">
