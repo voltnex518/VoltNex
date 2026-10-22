@@ -53,7 +53,7 @@ export const INITIAL_CATEGORIES: Category[] = [
 
 export const INITIAL_PROJECTS: Project[] = [
   {
-    id: 'p1000000-0000-0000-0000-000000000001',
+    id: 'a1000000-0000-0000-0000-000000000001',
     title: 'ESP32 Dual-Core IoT Weather Station with E-Paper Display',
     slug: 'esp32-epaper-weather-station',
     summary: 'Ultra-low power desk weather station running on an ESP32. Fetches OpenWeather data via Wi-Fi, samples local indoor temperature and humidity via BME280, and renders crisp typography on a 2.9" tri-color e-Paper screen before entering deep sleep.',
@@ -230,7 +230,7 @@ void loop() {}`,
     ],
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000002',
+    id: 'a1000000-0000-0000-0000-000000000002',
     title: 'Autonomous Obstacle Avoidance Rover with Ultrasonic Radar',
     slug: 'arduino-obstacle-avoidance-rover',
     summary: 'Dual-geared mobile robotics platform powered by Arduino Uno and an L298N H-Bridge. Features a pan-scanning ultrasonic sensor on an SG90 micro-servo that sweeps 180 degrees to calculate clear navigation vectors in real-time.',
@@ -419,7 +419,7 @@ void loop() {
     ],
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000003',
+    id: 'a1000000-0000-0000-0000-000000000003',
     title: 'LoRa Long-Range Precision Soil Telemetry Node',
     slug: 'lora-soil-telemetry-node',
     summary: 'Solar-powered, sub-GHz LoRa telemetry probe monitoring soil moisture, electrical conductivity, and subterranean temperature across a 5km radius without cellular subscriptions.',
@@ -547,7 +547,7 @@ void loop() {
 
 export const INITIAL_TUTORIALS: Tutorial[] = [
   {
-    id: 't1000000-0000-0000-0000-000000000001',
+    id: 'b1000000-0000-0000-0000-000000000001',
     title: 'ESP32 FreeRTOS Multitasking: Core Pinning, Queues & Semaphores',
     slug: 'esp32-freertos-multitasking-guide',
     summary: 'Learn how to leverage both Xtensa cores on your ESP32. Avoid blocking delays, manage concurrency safely with queues and mutexes, and prevent watchdog panics.',
@@ -586,7 +586,7 @@ Avoid modifying shared global variables directly across cores. Use FreeRTOS Queu
     updated_at: '2026-03-02T10:00:00Z',
   },
   {
-    id: 't1000000-0000-0000-0000-000000000002',
+    id: 'b1000000-0000-0000-0000-000000000002',
     title: 'Demystifying I2C & SPI: Pull-Up Resistors, Clock Speed, and Signal Integrity',
     slug: 'i2c-spi-protocol-deep-dive',
     summary: 'An electrical engineering guide to debugging serial communications. How to select pull-up resistor values, eliminate bus capacitance ringing, and troubleshoot packet corruption.',
@@ -617,7 +617,7 @@ If the total bus capacitance exceeds 400pF, rise times distort from crisp square
 
 export const INITIAL_RESOURCES: Resource[] = [
   {
-    id: 'r1000000-0000-0000-0000-000000000001',
+    id: 'd1000000-0000-0000-0000-000000000001',
     title: 'VoltNex Universal Microcontroller Pinout Reference Guide',
     slug: 'voltnex-microcontroller-pinout-guide',
     description: 'High-resolution vector printable reference detailing pin capabilities, ADC channels, PWM timers, and I2C/SPI mappings for Arduino Uno, Nano, ESP32-WROOM, and RP2040.',
@@ -632,7 +632,7 @@ export const INITIAL_RESOURCES: Resource[] = [
     updated_at: '2026-01-10T10:00:00Z',
   },
   {
-    id: 'r1000000-0000-0000-0000-000000000002',
+    id: 'd1000000-0000-0000-0000-000000000002',
     title: 'ESP32 Ultra-Low Power Deep Sleep & Timer Wakeup Template',
     slug: 'esp32-deep-sleep-ulp-template',
     description: 'Clean boilerplate C++ code for ESP32 deep sleep, RTC memory variable persistence across wake cycles, and sensor power gate transistor switching.',
@@ -647,7 +647,7 @@ export const INITIAL_RESOURCES: Resource[] = [
     updated_at: '2026-01-15T11:00:00Z',
   },
   {
-    id: 'r1000000-0000-0000-0000-000000000003',
+    id: 'd1000000-0000-0000-0000-000000000003',
     title: 'Obstacle Rover Chassis 3D Printable STL & CAD Bundle',
     slug: 'obstacle-rover-cad-stl-bundle',
     description: 'Complete 3D printable mechanical files (.STL) and laser cutting vectors (.DXF) for the VoltNex dual-wheel obstacle avoidance rover platform.',
@@ -672,7 +672,7 @@ export const INITIAL_SITE_SETTINGS: SiteSettings = {
   creator_instagram: '@pradeep_ln22',
   contact_email: 'voltnex518@gmail.com',
   announcement_banner: 'Welcome to VoltNex Labs! Explore our newly published ESP32, Arduino, and Robotics project blueprints.',
-  featured_project_ids: ['p1000000-0000-0000-0000-000000000001', 'p1000000-0000-0000-0000-000000000002'],
+  featured_project_ids: ['a1000000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000002'],
   updated_at: '2026-03-20T12:00:00Z',
 };
 

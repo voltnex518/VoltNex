@@ -59,7 +59,7 @@ INSERT INTO public.projects (
   seo_title,
   seo_description
 ) VALUES (
-  'p1000000-0000-0000-0000-000000000001',
+  'a1000000-0000-0000-0000-000000000001',
   'ESP32 Dual-Core IoT Weather Station with E-Paper Display',
   'esp32-epaper-weather-station',
   'Ultra-low power desk weather station running on an ESP32. Fetches OpenWeather data via Wi-Fi, samples local indoor temperature and humidity via BME280, and renders crisp typography on a 2.9" tri-color e-Paper screen before entering deep sleep.',
@@ -79,31 +79,31 @@ INSERT INTO public.projects (
 
 -- Project 1 Categories
 INSERT INTO public.project_categories (project_id, category_id) VALUES
-  ('p1000000-0000-0000-0000-000000000001', 'c1000000-0000-0000-0000-000000000002'),
-  ('p1000000-0000-0000-0000-000000000001', 'c1000000-0000-0000-0000-000000000003'),
-  ('p1000000-0000-0000-0000-000000000001', 'c1000000-0000-0000-0000-000000000005')
+  ('a1000000-0000-0000-0000-000000000001', 'c1000000-0000-0000-0000-000000000002'),
+  ('a1000000-0000-0000-0000-000000000001', 'c1000000-0000-0000-0000-000000000003'),
+  ('a1000000-0000-0000-0000-000000000001', 'c1000000-0000-0000-0000-000000000005')
 ON CONFLICT DO NOTHING;
 
 -- Project 1 Components
 INSERT INTO public.project_components (project_id, name, quantity, notes, display_order) VALUES
-  ('p1000000-0000-0000-0000-000000000001', 'ESP32 NodeMCU Development Board (38-pin)', '1', 'ESP-WROOM-32 with micro-USB or Type-C', 1),
-  ('p1000000-0000-0000-0000-000000000001', 'Waveshare 2.9" E-Paper Module (296x128)', '1', 'Tri-Color (Black/White/Red) SPI interface', 2),
-  ('p1000000-0000-0000-0000-000000000001', 'Bosch BME280 Sensor Module', '1', 'I2C pressure, humidity, and temperature sensor', 3),
-  ('p1000000-0000-0000-0000-000000000001', '18650 3.7V 2600mAh Li-ion Battery & Holder', '1', 'Equipped with TP4056 USB-C charging module', 4),
-  ('p1000000-0000-0000-0000-000000000001', 'HT7333-A Ultra-Low Quiescent LDO Regulator', '1', '3.3V 250mA output with 1.2µA quiescent current', 5)
+  ('a1000000-0000-0000-0000-000000000001', 'ESP32 NodeMCU Development Board (38-pin)', '1', 'ESP-WROOM-32 with micro-USB or Type-C', 1),
+  ('a1000000-0000-0000-0000-000000000001', 'Waveshare 2.9" E-Paper Module (296x128)', '1', 'Tri-Color (Black/White/Red) SPI interface', 2),
+  ('a1000000-0000-0000-0000-000000000001', 'Bosch BME280 Sensor Module', '1', 'I2C pressure, humidity, and temperature sensor', 3),
+  ('a1000000-0000-0000-0000-000000000001', '18650 3.7V 2600mAh Li-ion Battery & Holder', '1', 'Equipped with TP4056 USB-C charging module', 4),
+  ('a1000000-0000-0000-0000-000000000001', 'HT7333-A Ultra-Low Quiescent LDO Regulator', '1', '3.3V 250mA output with 1.2µA quiescent current', 5)
 ON CONFLICT DO NOTHING;
 
 -- Project 1 Steps
 INSERT INTO public.project_steps (project_id, step_number, title, content, image_url) VALUES
-  ('p1000000-0000-0000-0000-000000000001', 1, 'Breadboard Prototyping & I2C Bus Verification', 'Seat the ESP32 on your breadboard. Wire the BME280 module to 3.3V, GND, SDA (GPIO 21), and SCL (GPIO 22). Run an I2C scanner sketch to confirm sensor detection at address 0x76 or 0x77.', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'),
-  ('p1000000-0000-0000-0000-000000000001', 2, 'Connecting the Waveshare 2.9" E-Paper Module', 'Wire the SPI bus lines: CS (GPIO 5), DC (GPIO 17), RST (GPIO 16), BUSY (GPIO 4), DIN (GPIO 23), and CLK (GPIO 18). Install the GxEPD2 library through Arduino IDE Library Manager.', 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&w=800&q=80'),
-  ('p1000000-0000-0000-0000-000000000001', 3, 'Firmware Configuration and OpenWeather API Setup', 'Obtain your free API Key from OpenWeatherMap. Update secrets.h with your Wi-Fi credentials, API Key, and city latitude/longitude. Compile and flash the code.', 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80'),
-  ('p1000000-0000-0000-0000-000000000001', 4, 'Power Optimization and Enclosure Assembly', 'Bypass the devboard onboard AMS1117 regulator by supplying 3.3V from the ultra-low quiescent HT7333 LDO. Snap into a 3D-printed desktop angled stand.', 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80')
+  ('a1000000-0000-0000-0000-000000000001', 1, 'Breadboard Prototyping & I2C Bus Verification', 'Seat the ESP32 on your breadboard. Wire the BME280 module to 3.3V, GND, SDA (GPIO 21), and SCL (GPIO 22). Run an I2C scanner sketch to confirm sensor detection at address 0x76 or 0x77.', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'),
+  ('a1000000-0000-0000-0000-000000000001', 2, 'Connecting the Waveshare 2.9" E-Paper Module', 'Wire the SPI bus lines: CS (GPIO 5), DC (GPIO 17), RST (GPIO 16), BUSY (GPIO 4), DIN (GPIO 23), and CLK (GPIO 18). Install the GxEPD2 library through Arduino IDE Library Manager.', 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&w=800&q=80'),
+  ('a1000000-0000-0000-0000-000000000001', 3, 'Firmware Configuration and OpenWeather API Setup', 'Obtain your free API Key from OpenWeatherMap. Update secrets.h with your Wi-Fi credentials, API Key, and city latitude/longitude. Compile and flash the code.', 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80'),
+  ('a1000000-0000-0000-0000-000000000001', 4, 'Power Optimization and Enclosure Assembly', 'Bypass the devboard onboard AMS1117 regulator by supplying 3.3V from the ultra-low quiescent HT7333 LDO. Snap into a 3D-printed desktop angled stand.', 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80')
 ON CONFLICT DO NOTHING;
 
 -- Project 1 Code Snippet
 INSERT INTO public.project_code_snippets (project_id, title, filename, language, code, display_order) VALUES
-  ('p1000000-0000-0000-0000-000000000001', 'Main Weather Station Firmware', 'esp32_epaper_station.ino', 'cpp', 
+  ('a1000000-0000-0000-0000-000000000001', 'Main Weather Station Firmware', 'esp32_epaper_station.ino', 'cpp', 
 '#include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -211,7 +211,7 @@ INSERT INTO public.projects (
   seo_title,
   seo_description
 ) VALUES (
-  'p1000000-0000-0000-0000-000000000002',
+  'a1000000-0000-0000-0000-000000000002',
   'Autonomous Obstacle Avoidance Rover with Ultrasonic Radar',
   'arduino-obstacle-avoidance-rover',
   'Dual-geared mobile robotics platform powered by Arduino Uno and an L298N H-Bridge. Features a pan-scanning ultrasonic sensor on an SG90 micro-servo that sweeps 180 degrees to calculate clear navigation vectors in real-time.',
@@ -231,9 +231,9 @@ INSERT INTO public.projects (
 
 -- Project 2 Categories
 INSERT INTO public.project_categories (project_id, category_id) VALUES
-  ('p1000000-0000-0000-0000-000000000002', 'c1000000-0000-0000-0000-000000000001'),
-  ('p1000000-0000-0000-0000-000000000002', 'c1000000-0000-0000-0000-000000000004'),
-  ('p1000000-0000-0000-0000-000000000002', 'c1000000-0000-0000-0000-000000000005')
+  ('a1000000-0000-0000-0000-000000000002', 'c1000000-0000-0000-0000-000000000001'),
+  ('a1000000-0000-0000-0000-000000000002', 'c1000000-0000-0000-0000-000000000004'),
+  ('a1000000-0000-0000-0000-000000000002', 'c1000000-0000-0000-0000-000000000005')
 ON CONFLICT DO NOTHING;
 
 -- Project 3: LoRa Soil Telemetry Node
@@ -255,7 +255,7 @@ INSERT INTO public.projects (
   seo_title,
   seo_description
 ) VALUES (
-  'p1000000-0000-0000-0000-000000000003',
+  'a1000000-0000-0000-0000-000000000003',
   'LoRa Long-Range Precision Soil Telemetry Node',
   'lora-soil-telemetry-node',
   'Solar-powered, sub-GHz LoRa telemetry probe monitoring soil moisture, electrical conductivity, and subterranean temperature across a 5km radius without cellular subscriptions.',
@@ -275,9 +275,9 @@ INSERT INTO public.projects (
 
 -- Project 3 Categories
 INSERT INTO public.project_categories (project_id, category_id) VALUES
-  ('p1000000-0000-0000-0000-000000000003', 'c1000000-0000-0000-0000-000000000003'),
-  ('p1000000-0000-0000-0000-000000000003', 'c1000000-0000-0000-0000-000000000005'),
-  ('p1000000-0000-0000-0000-000000000003', 'c1000000-0000-0000-0000-000000000006')
+  ('a1000000-0000-0000-0000-000000000003', 'c1000000-0000-0000-0000-000000000003'),
+  ('a1000000-0000-0000-0000-000000000003', 'c1000000-0000-0000-0000-000000000005'),
+  ('a1000000-0000-0000-0000-000000000003', 'c1000000-0000-0000-0000-000000000006')
 ON CONFLICT DO NOTHING;
 
 -- Insert Tutorials
@@ -295,7 +295,7 @@ INSERT INTO public.tutorials (
   tags
 ) VALUES
 (
-  't1000000-0000-0000-0000-000000000001',
+  'b1000000-0000-0000-0000-000000000001',
   'ESP32 FreeRTOS Multitasking: Core Pinning, Queues & Semaphores',
   'esp32-freertos-multitasking-guide',
   'Learn how to leverage both Xtensa cores on your ESP32. Avoid blocking delays, manage concurrency safely with queues and mutexes, and prevent watchdog panics.',
@@ -308,7 +308,7 @@ INSERT INTO public.tutorials (
   ARRAY['ESP32', 'FreeRTOS', 'C++', 'Embedded Systems', 'Concurrency']
 ),
 (
-  't1000000-0000-0000-0000-000000000002',
+  'b1000000-0000-0000-0000-000000000002',
   'Demystifying I2C & SPI: Pull-Up Resistors, Clock Speed, and Signal Integrity',
   'i2c-spi-protocol-deep-dive',
   'An electrical engineer guide to debugging serial communications. How to select pull-up resistor values, eliminate bus capacitance ringing, and troubleshoot packet corruption.',
@@ -321,7 +321,7 @@ INSERT INTO public.tutorials (
   ARRAY['I2C', 'SPI', 'Hardware Debugging', 'Oscilloscopes', 'Signal Integrity']
 ),
 (
-  't1000000-0000-0000-0000-000000000003',
+  'b1000000-0000-0000-0000-000000000003',
   'Beginner Guide to Microcontroller Interrupts & Debouncing',
   'microcontroller-interrupts-debouncing',
   'Never use delay() in production firmware again. Master external hardware interrupts, volatile variables, and hardware RC debouncing.',
@@ -350,7 +350,7 @@ INSERT INTO public.resources (
   download_count
 ) VALUES
 (
-  'r1000000-0000-0000-0000-000000000001',
+  'd1000000-0000-0000-0000-000000000001',
   'VoltNex Universal Microcontroller Pinout Reference Guide',
   'voltnex-microcontroller-pinout-guide',
   'High-resolution vector printable reference detailing pin capabilities, ADC channels, PWM timers, and I2C/SPI mappings for Arduino Uno, Nano, ESP32-WROOM, and RP2040.',
@@ -363,7 +363,7 @@ INSERT INTO public.resources (
   142
 ),
 (
-  'r1000000-0000-0000-0000-000000000002',
+  'd1000000-0000-0000-0000-000000000002',
   'ESP32 Ultra-Low Power Deep Sleep & Timer Wakeup Template',
   'esp32-deep-sleep-ulp-template',
   'Clean boilerplate C++ code for ESP32 deep sleep, RTC memory variable persistence across wake cycles, and sensor power gate transistor switching.',
@@ -376,7 +376,7 @@ INSERT INTO public.resources (
   318
 ),
 (
-  'r1000000-0000-0000-0000-000000000003',
+  'd1000000-0000-0000-0000-000000000003',
   'Obstacle Rover Chassis 3D Printable STL & Laser Cut CAD Bundle',
   'obstacle-rover-cad-stl-bundle',
   'Complete 3D printable mechanical files (.STL) and laser cutting vectors (.DXF) for the VoltNex dual-wheel obstacle avoidance rover platform.',
@@ -389,7 +389,7 @@ INSERT INTO public.resources (
   89
 ),
 (
-  'r1000000-0000-0000-0000-000000000004',
+  'd1000000-0000-0000-0000-000000000004',
   'LoRa Sensor Node KiCad 8 Schematic & PCB Layout Files',
   'lora-sensor-node-kicad-project',
   'Complete production-ready KiCad PCB design with copper pour thermal relief, 50-ohm RF trace geometry, and Bill of Materials.',
