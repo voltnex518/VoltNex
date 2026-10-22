@@ -23,7 +23,7 @@ export const AdminSettingsPage: React.FC = () => {
       setTagline(settings.tagline || 'Power Ideas. Build the Future.');
       setDescription(settings.description || '');
       setCreatorName(settings.creator_name || 'Pradeep');
-      setCreatorInstagram(settings.creator_instagram || '@pradeep_ln22');
+      setCreatorInstagram(settings.creator_instagram || '@voltn.ex');
       setContactEmail(settings.contact_email || 'voltnex518@gmail.com');
       setAnnouncementBanner(settings.announcement_banner || '');
     }

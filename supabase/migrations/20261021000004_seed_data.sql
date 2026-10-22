@@ -18,7 +18,7 @@ INSERT INTO public.site_settings (
   'Power Ideas. Build the Future.',
   'An open-access electronics, embedded systems, robotics, and maker-education platform where builders discover verified schematics, firmware, and step-by-step guides.',
   'Pradeep',
-  '@pradeep_ln22',
+  '@voltn.ex',
   'voltnex518@gmail.com',
   'Welcome to VoltNex! Explore our newly published ESP32 and Robotics project blueprints.'
 ) ON CONFLICT (id) DO UPDATE SET

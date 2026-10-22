@@ -92,13 +92,13 @@ export const AboutPage: React.FC = () => {
 
             <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-4">
               <a
-                href={`https://instagram.com/${(settings?.creator_instagram || '@pradeep_ln22').replace('@', '')}`}
+                href={`https://instagram.com/${(settings?.creator_instagram || '@voltn.ex').replace('@', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-600/80 hover:bg-pink-600 text-white text-xs font-semibold transition"
               >
                 <InstagramIcon className="w-4 h-4" />
-                <span>{settings?.creator_instagram || '@pradeep_ln22'}</span>
+                <span>{settings?.creator_instagram || '@voltn.ex'}</span>
               </a>
               <a
                 href={`mailto:${settings?.contact_email || 'voltnex518@gmail.com'}`}

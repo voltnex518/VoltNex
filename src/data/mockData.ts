@@ -669,7 +669,7 @@ export const INITIAL_SITE_SETTINGS: SiteSettings = {
   tagline: 'Power Ideas. Build the Future.',
   description: 'An open-access electronics, embedded systems, robotics, and maker-education platform where builders discover verified schematics, firmware, and step-by-step guides.',
   creator_name: 'Pradeep',
-  creator_instagram: '@pradeep_ln22',
+  creator_instagram: '@voltn.ex',
   contact_email: 'voltnex518@gmail.com',
   announcement_banner: 'Welcome to VoltNex Labs! Explore our newly published ESP32, Arduino, and Robotics project blueprints.',
   featured_project_ids: ['a1000000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000002'],

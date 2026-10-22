@@ -109,12 +109,12 @@ export const Footer: React.FC = () => {
               <div className="flex items-center gap-2">
                 <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
                 <a
-                  href={`https://instagram.com/${(settings?.creator_instagram || '@pradeep_ln22').replace('@', '')}`}
+                  href={`https://instagram.com/${(settings?.creator_instagram || '@voltn.ex').replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-cyan-400 transition"
                 >
-                  {settings?.creator_instagram || '@pradeep_ln22'}
+                  {settings?.creator_instagram || '@voltn.ex'}
                 </a>
               </div>
               <div className="flex items-center gap-2">

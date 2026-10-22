@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
     tagline TEXT NOT NULL DEFAULT 'Power Ideas. Build the Future.',
     description TEXT NOT NULL DEFAULT 'Electronics, embedded systems, robotics, and maker-education platform.',
     creator_name TEXT NOT NULL DEFAULT 'Pradeep',
-    creator_instagram TEXT NOT NULL DEFAULT '@pradeep_ln22',
+    creator_instagram TEXT NOT NULL DEFAULT '@voltn.ex',
     contact_email TEXT NOT NULL DEFAULT 'voltnex518@gmail.com',
     announcement_banner TEXT,
     featured_project_ids UUID[] NOT NULL DEFAULT '{}',

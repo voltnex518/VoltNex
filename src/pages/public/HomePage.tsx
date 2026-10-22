@@ -473,13 +473,13 @@ void setup() {
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4">
                 <a
-                  href={`https://instagram.com/${(settings?.creator_instagram || '@pradeep_ln22').replace('@', '')}`}
+                  href={`https://instagram.com/${(settings?.creator_instagram || '@voltn.ex').replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-600/80 hover:bg-pink-600 text-white text-xs font-semibold shadow-sm transition"
                 >
                   <InstagramIcon className="w-4 h-4" />
-                  <span>Follow {settings?.creator_instagram || '@pradeep_ln22'}</span>
+                  <span>Follow {settings?.creator_instagram || '@voltn.ex'}</span>
                 </a>
                 <Link
                   to="/about"
@@ -498,7 +498,7 @@ void setup() {
                 </div>
                 <h4 className="text-base font-bold text-white">Pradeep</h4>
                 <p className="text-xs text-cyan-400 font-mono mt-0.5">
-                  {settings?.creator_instagram || '@pradeep_ln22'}
+                  {settings?.creator_instagram || '@voltn.ex'}
                 </p>
                 <p className="text-xs text-slate-400 mt-2">
                   Embedded Systems • IoT • Robotics Builder • Educator

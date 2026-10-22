@@ -123,7 +123,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setResources(resourcesRes.value.data);
         }
         if (settingsRes.status === 'fulfilled' && settingsRes.value.data) {
-          setSettings(settingsRes.value.data);
+          const loadedSettings = settingsRes.value.data;
+          if (!loadedSettings.creator_instagram || loadedSettings.creator_instagram === '@pradeep_ln22') {
+            loadedSettings.creator_instagram = '@voltn.ex';
+          }
+          setSettings(loadedSettings);
         }
         if (messagesRes.status === 'fulfilled' && messagesRes.value.data) {
           setMessages(messagesRes.value.data);
@@ -351,7 +355,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     if (isSupabaseConfigured() && supabase) {
       try {
-        const { error: upsertErr } = await supabase.from('categories').upsert(fullCat);
+        const payload = {
+          ...(isNew ? {} : { id: fullCat.id }),
+          name: fullCat.name,
+          slug: fullCat.slug,
+          description: fullCat.description,
+          icon: fullCat.icon,
+          display_order: fullCat.display_order,
+        };
+        const { error: upsertErr } = await supabase.from('categories').upsert(payload);
         if (upsertErr) return { success: false, error: upsertErr.message };
         await loadData();
         return { success: true, data: fullCat };
@@ -528,7 +540,21 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     if (isSupabaseConfigured() && supabase) {
       try {
-        const { error: upsertErr } = await supabase.from('resources').upsert(fullResource);
+        const payload = {
+          ...(isNew ? {} : { id: fullResource.id }),
+          title: fullResource.title,
+          slug: fullResource.slug,
+          description: fullResource.description,
+          file_url: fullResource.file_url,
+          file_name: fullResource.file_name,
+          file_type: fullResource.file_type,
+          file_size_bytes: fullResource.file_size_bytes,
+          technology: fullResource.technology,
+          status: fullResource.status,
+          download_count: fullResource.download_count,
+          updated_at: now,
+        };
+        const { error: upsertErr } = await supabase.from('resources').upsert(payload);
         if (upsertErr) return { success: false, error: upsertErr.message };
         await loadData();
         return { success: true, data: fullResource };
@@ -606,16 +632,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const submitContactForm = async (
     submission: Omit<ContactSubmission, 'id' | 'status' | 'created_at'>
   ): Promise<{ success: boolean; error?: string }> => {
-    const newMsg: ContactSubmission = {
-      id: `msg_${Date.now()}`,
-      ...submission,
-      status: 'unread',
-      created_at: new Date().toISOString(),
-    };
-
     if (isSupabaseConfigured() && supabase) {
       try {
-        const { error: insErr } = await supabase.from('contact_submissions').insert(newMsg);
+        const { error: insErr } = await supabase.from('contact_submissions').insert({
+          name: submission.name,
+          email: submission.email,
+          subject: submission.subject,
+          message: submission.message,
+          status: 'unread',
+        });
         if (insErr) return { success: false, error: insErr.message };
         return { success: true };
       } catch (err: unknown) {
@@ -623,6 +648,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { success: false, error: msg };
       }
     }
+
+    const localId = typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `00000000-0000-4000-8000-${Date.now().toString(16).padStart(12, '0')}`;
+    const newMsg: ContactSubmission = {
+      id: localId,
+      ...submission,
+      status: 'unread',
+      created_at: new Date().toISOString(),
+    };
 
     const updated = [newMsg, ...messages];
     setMessages(updated);

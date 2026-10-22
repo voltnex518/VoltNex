@@ -1,7 +1,7 @@
 # VoltNex Labs — Open-Source Hardware & Robotics Platform
 
 > **Power Ideas. Build the Future.**  
-> Creator: **Pradeep** • Instagram: [@pradeep_ln22](https://instagram.com/pradeep_ln22) • Email: [voltnex518@gmail.com](mailto:voltnex518@gmail.com)
+> Creator: **Pradeep** • Instagram: [@voltn.ex](https://instagram.com/voltn.ex) • Email: [voltnex518@gmail.com](mailto:voltnex518@gmail.com)
 
 VoltNex Labs is an open-access electronics, embedded systems, and robotics platform. Builders and makers discover verified schematics, Bill of Materials, wiring pinouts, step-by-step assembly guides, and production-grade firmware (.ino, .c, .cpp, .py). It includes a secure owner dashboard for content management with zero manual code editing required for new project publications.
 

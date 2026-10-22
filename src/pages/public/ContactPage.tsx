@@ -107,12 +107,12 @@ export const ContactPage: React.FC = () => {
                   <div>
                     <span className="text-xs font-mono text-slate-400 block">Instagram DM</span>
                     <a
-                      href={`https://instagram.com/${(settings?.creator_instagram || '@pradeep_ln22').replace('@', '')}`}
+                      href={`https://instagram.com/${(settings?.creator_instagram || '@voltn.ex').replace('@', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs font-semibold text-slate-800 hover:text-pink-600 transition"
                     >
-                      {settings?.creator_instagram || '@pradeep_ln22'}
+                      {settings?.creator_instagram || '@voltn.ex'}
                     </a>
                   </div>
                 </div>
