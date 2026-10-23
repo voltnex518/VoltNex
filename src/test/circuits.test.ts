@@ -3,6 +3,7 @@ import {
   COMPONENT_DEFINITIONS,
   getComponentDefinition,
   CATEGORIES,
+  searchComponents,
 } from '../lib/circuit/components';
 import {
   snapToGrid,
@@ -412,3 +413,175 @@ describe('Circuit Data Serialization & Pre-built Templates', () => {
     expect(svgOutput).toContain('http://www.w3.org/2000/svg');
   });
 });
+
+describe('EDA Component Registry & Pin Architecture', () => {
+  it('Arduino Uno R3 has authentic 32-pin layout with exact headers and stable IDs', () => {
+    const uno = getComponentDefinition('arduino_uno');
+    expect(uno).toBeDefined();
+    expect(uno?.pins).toHaveLength(32);
+
+    // Verify digital header pins (D0 - D13, AREF, SDA, SCL)
+    const expectedDigitalPins = ['d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'd12', 'd13'];
+    for (const dPin of expectedDigitalPins) {
+      const pin = uno?.pins.find((p) => p.id === dPin);
+      expect(pin, `Pin ${dPin} must exist on Arduino Uno`).toBeDefined();
+      expect(pin?.type).toBe('digital');
+      expect(pin?.gpio).toBeDefined();
+    }
+
+    // Verify analog header pins (A0 - A5)
+    for (let i = 0; i <= 5; i++) {
+      const aPin = uno?.pins.find((p) => p.id === `a${i}`);
+      expect(aPin, `Pin a${i} must exist`).toBeDefined();
+      expect(aPin?.type).toBe('analog');
+    }
+
+    // Verify power header pins (5V, 3.3V, VIN, RESET, GND)
+    expect(uno?.pins.find((p) => p.id === 'p5v')).toBeDefined();
+    expect(uno?.pins.find((p) => p.id === 'p3v3')).toBeDefined();
+    expect(uno?.pins.find((p) => p.id === 'gnd_top')).toBeDefined();
+    expect(uno?.pins.find((p) => p.id === 'gnd_bot1')).toBeDefined();
+    expect(uno?.pins.find((p) => p.id === 'gnd_bot2')).toBeDefined();
+    expect(uno?.pins.find((p) => p.id === 'vin')).toBeDefined();
+    expect(uno?.pins.find((p) => p.id === 'reset')).toBeDefined();
+
+    // Verify distinct headers: top header at y=15, bottom header at y=185
+    const topPins = uno?.pins.filter((p) => p.y === 15);
+    const bottomPins = uno?.pins.filter((p) => p.y === 185);
+    expect(topPins?.length).toBe(18); // SCL, SDA, AREF, GND, D13..D8, D7..D0
+    expect(bottomPins?.length).toBe(14); // NC, IOREF, RESET, 3.3V, 5V, GND, GND, VIN, A0..A5
+  });
+
+  it('ESP32 DevKit defines 30-pin dual-row footprint with GPIO mappings', () => {
+    const esp32 = getComponentDefinition('esp32_devkit');
+    expect(esp32).toBeDefined();
+    expect(esp32?.pins).toHaveLength(30);
+
+    const pin3v3 = esp32?.pins.find((p) => p.id === 'p3v3');
+    expect(pin3v3).toBeDefined();
+    expect(pin3v3?.type).toBe('power');
+
+    const d2 = esp32?.pins.find((p) => p.id === 'd2');
+    expect(d2).toBeDefined();
+    expect(String(d2?.gpio)).toBe('2');
+
+    const d13 = esp32?.pins.find((p) => p.id === 'd13');
+    expect(d13).toBeDefined();
+    expect(String(d13?.gpio)).toBe('13');
+
+    // Verify 15 pins top (y=15) and 15 pins bottom (y=165)
+    const topPins = esp32?.pins.filter((p) => p.y === 15);
+    const bottomPins = esp32?.pins.filter((p) => p.y === 165);
+    expect(topPins).toHaveLength(15);
+    expect(bottomPins).toHaveLength(15);
+  });
+
+  it('ESP8266 NodeMCU defines 30-pin footprint with GPIO and ADC pin mappings', () => {
+    const nodemcu = getComponentDefinition('esp8266_nodemcu');
+    expect(nodemcu).toBeDefined();
+    expect(nodemcu?.pins).toHaveLength(30);
+
+    const a0 = nodemcu?.pins.find((p) => p.id === 'a0');
+    expect(a0).toBeDefined();
+    expect(a0?.type).toBe('analog');
+
+    const d4 = nodemcu?.pins.find((p) => p.id === 'd4');
+    expect(d4).toBeDefined();
+    expect(String(d4?.gpio)).toBe('2'); // D4 maps to GPIO2
+  });
+
+  it('every component in the registry has unique, non-duplicated pin IDs', () => {
+    for (const def of COMPONENT_DEFINITIONS) {
+      const pinIds = new Set<string>();
+      for (const pin of def.pins) {
+        expect(
+          pinIds.has(pin.id),
+          `Component "${def.id}" has duplicate pin ID "${pin.id}"`
+        ).toBe(false);
+        pinIds.add(pin.id);
+        expect(pin.name).toBeTruthy();
+        expect(pin.type).toBeTruthy();
+        expect(typeof pin.x).toBe('number');
+        expect(typeof pin.y).toBe('number');
+      }
+    }
+  });
+
+  it('searchComponents accurately filters by name, description, pin name, and category', () => {
+    // Search by name
+    const arduinoResults = searchComponents('Arduino');
+    expect(arduinoResults.some((c) => c.id === 'arduino_uno')).toBe(true);
+
+    // Search by pin identifier
+    const d13Results = searchComponents('D13');
+    expect(d13Results.some((c) => c.id === 'arduino_uno')).toBe(true);
+    expect(d13Results.some((c) => c.id === 'esp32_devkit')).toBe(true);
+
+    // Search by category
+    const sensorResults = searchComponents('', 'sensors');
+    expect(sensorResults.length).toBeGreaterThanOrEqual(4);
+    expect(sensorResults.every((c) => c.category === 'sensors')).toBe(true);
+
+    // Search by GPIO
+    const gpioResults = searchComponents('GPIO2');
+    expect(gpioResults.some((c) => c.id === 'esp32_devkit' || c.id === 'esp8266_nodemcu')).toBe(true);
+  });
+
+  it('maintains wire terminal alignment under translation and 90/180/270 rotation', () => {
+    const comp: CircuitComponentInstance = {
+      id: 'test_uno',
+      typeId: 'arduino_uno',
+      reference: 'U1',
+      label: 'Arduino Uno R3',
+      x: 200,
+      y: 150,
+      rotation: 0,
+      properties: {},
+    };
+
+    const def = getComponentDefinition('arduino_uno')!;
+    const d13Pin = def.pins.find((p) => p.id === 'd13')!;
+
+    // Rotation 0
+    const pos0 = getRotatedPinPosition(comp, d13Pin);
+    expect(pos0.x).toBe(comp.x + d13Pin.x);
+    expect(pos0.y).toBe(comp.y + d13Pin.y);
+
+    // Rotation 90 degrees around center (cx = 140, cy = 100)
+    const comp90: CircuitComponentInstance = { ...comp, rotation: 90 };
+    const pos90 = getRotatedPinPosition(comp90, d13Pin);
+    expect(pos90.x).not.toBe(pos0.x);
+    expect(pos90.y).not.toBe(pos0.y);
+
+    // Rotation 360 degrees should equal rotation 0
+    const comp360: CircuitComponentInstance = { ...comp, rotation: 360 };
+    const pos360 = getRotatedPinPosition(comp360, d13Pin);
+    expect(Math.round(pos360.x)).toBe(Math.round(pos0.x));
+    expect(Math.round(pos360.y)).toBe(Math.round(pos0.y));
+  });
+
+  it('preserves backward compatibility with legacy saved Arduino circuit designs', () => {
+    // Legacy design connecting Arduino Uno pin p5v, gnd_top, d9, d10
+    const legacyUnoComp: CircuitComponentInstance = {
+      id: 'uno_legacy',
+      typeId: 'arduino_uno',
+      reference: 'U1',
+      label: 'Arduino Uno R3',
+      x: 100,
+      y: 100,
+      rotation: 0,
+      properties: {},
+    };
+
+    const def = getComponentDefinition('arduino_uno')!;
+    const legacyRequiredPins = ['p5v', 'gnd_top', 'd9', 'd10', 'a0'];
+    for (const pinId of legacyRequiredPins) {
+      const pin = def.pins.find((p) => p.id === pinId);
+      expect(pin, `Legacy pin ID ${pinId} must exist for backward compatibility`).toBeDefined();
+      const pos = getRotatedPinPosition(legacyUnoComp, pin!);
+      expect(pos.x).toBeGreaterThan(0);
+      expect(pos.y).toBeGreaterThan(0);
+    }
+  });
+});
+

@@ -319,6 +319,25 @@ export const CircuitCanvas: React.FC<CircuitCanvasProps> = ({
           );
           onChangeData?.({ ...data, components: updated });
         }
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'd' || e.key === 'D')) {
+        e.preventDefault();
+        if (selectedComponentId) {
+          const targetComp = data.components.find((c) => c.id === selectedComponentId);
+          if (targetComp) {
+            const def = getComponentDefinition(targetComp.typeId);
+            const existingSame = data.components.filter((c) => c.typeId === targetComp.typeId);
+            const reference = `${def?.defaultRefPrefix || 'U'}${existingSame.length + 1}`;
+            const dupComp: CircuitComponentInstance = {
+              ...targetComp,
+              id: `c_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+              reference,
+              x: targetComp.x + 30,
+              y: targetComp.y + 30,
+            };
+            onChangeData?.({ ...data, components: [...data.components, dupComp] });
+            onSelectComponent(dupComp.id);
+          }
+        }
       }
     };
 
@@ -362,13 +381,25 @@ export const CircuitCanvas: React.FC<CircuitCanvasProps> = ({
       >
         <defs>
           {/* Engineering Minor Dots Pattern */}
-          <pattern id="grid-dots" width="20" height="20" patternUnits="userSpaceOnUse">
-            <circle cx="2" cy="2" r="1" fill="#1E293B" />
+          <pattern
+            id="grid-dots"
+            width="20"
+            height="20"
+            patternUnits="userSpaceOnUse"
+            patternTransform={`translate(${viewport.x}, ${viewport.y}) scale(${viewport.zoom})`}
+          >
+            <circle cx="2" cy="2" r="0.8" fill="#334155" opacity="0.6" />
           </pattern>
           {/* Engineering Major Grid Lines */}
-          <pattern id="grid-major" width="100" height="100" patternUnits="userSpaceOnUse">
+          <pattern
+            id="grid-major"
+            width="100"
+            height="100"
+            patternUnits="userSpaceOnUse"
+            patternTransform={`translate(${viewport.x}, ${viewport.y}) scale(${viewport.zoom})`}
+          >
             <rect width="100" height="100" fill="url(#grid-dots)" />
-            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#1E293B" strokeWidth="0.75" />
+            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#334155" strokeWidth="0.75" opacity="0.45" />
           </pattern>
         </defs>
 
@@ -434,6 +465,7 @@ export const CircuitCanvas: React.FC<CircuitCanvasProps> = ({
                   isEnergized={isEnergized}
                   isBlown={isBlown}
                   activePinId={wireStart?.compId === comp.id ? wireStart.pinId : null}
+                  pinLabelMode={data.settings?.pinLabelMode || 'auto'}
                   onPinClick={(e, pin) => handlePinClick(e, comp, pin)}
                   onToggleInteractive={(e) => {
                     e.stopPropagation();

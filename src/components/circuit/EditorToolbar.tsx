@@ -21,8 +21,12 @@ import {
   Check,
   AlertCircle,
   Loader2,
+  Tag,
+  Hash,
+  EyeOff,
+  ChevronDown,
 } from 'lucide-react';
-import type { CircuitData } from '../../types/circuit';
+import type { CircuitData, PinLabelMode } from '../../types/circuit';
 import { useToast } from '../common/Toast';
 import {
   exportCircuitToJson,
@@ -104,11 +108,35 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
     setShowExportMenu(false);
   };
 
+  const [showPinLabelMenu, setShowPinLabelMenu] = useState(false);
+
+  const currentPinLabelMode: PinLabelMode = data.settings?.pinLabelMode || 'auto';
+
+  const setPinLabelMode = (mode: PinLabelMode) => {
+    onChangeData?.({
+      ...data,
+      settings: {
+        ...data.settings,
+        showGrid: data.settings?.showGrid ?? true,
+        gridSnap: data.settings?.gridSnap ?? true,
+        wireRouting: data.settings?.wireRouting ?? 'orthogonal',
+        pinLabelMode: mode,
+      },
+    });
+    setShowPinLabelMenu(false);
+  };
+
   const toggleGrid = () => {
     const showGrid = data.settings?.showGrid ?? true;
     onChangeData?.({
       ...data,
-      settings: { ...data.settings, showGrid: !showGrid, gridSnap: data.settings?.gridSnap ?? true, wireRouting: data.settings?.wireRouting ?? 'orthogonal' },
+      settings: {
+        ...data.settings,
+        showGrid: !showGrid,
+        gridSnap: data.settings?.gridSnap ?? true,
+        wireRouting: data.settings?.wireRouting ?? 'orthogonal',
+        pinLabelMode: currentPinLabelMode,
+      },
     });
   };
 
@@ -116,7 +144,13 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
     const gridSnap = data.settings?.gridSnap ?? true;
     onChangeData?.({
       ...data,
-      settings: { ...data.settings, gridSnap: !gridSnap, showGrid: data.settings?.showGrid ?? true, wireRouting: data.settings?.wireRouting ?? 'orthogonal' },
+      settings: {
+        ...data.settings,
+        gridSnap: !gridSnap,
+        showGrid: data.settings?.showGrid ?? true,
+        wireRouting: data.settings?.wireRouting ?? 'orthogonal',
+        pinLabelMode: currentPinLabelMode,
+      },
     });
   };
 
@@ -287,6 +321,63 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         >
           <Magnet className="w-4 h-4" />
         </button>
+
+        <div className="h-4 w-px bg-slate-800 mx-1" />
+
+        {/* Pin Label Mode Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setShowPinLabelMenu(!showPinLabelMenu)}
+            title={`Pin Labels: ${currentPinLabelMode.toUpperCase()} (Click to toggle)`}
+            className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-mono transition ${
+              currentPinLabelMode !== 'hidden'
+                ? 'bg-slate-900 border border-slate-700/80 text-cyan-300 hover:bg-slate-800'
+                : 'text-slate-500 hover:text-slate-400'
+            }`}
+          >
+            {currentPinLabelMode === 'hidden' ? (
+              <EyeOff className="w-3.5 h-3.5" />
+            ) : currentPinLabelMode === 'numbers' ? (
+              <Hash className="w-3.5 h-3.5" />
+            ) : (
+              <Tag className="w-3.5 h-3.5" />
+            )}
+            <span className="capitalize text-[11px] font-semibold">{currentPinLabelMode}</span>
+            <ChevronDown className="w-3 h-3 text-slate-500" />
+          </button>
+
+          {showPinLabelMenu && (
+            <div className="absolute right-0 mt-1.5 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1.5 z-50 text-xs font-sans">
+              <div className="px-3 py-1 text-[10px] font-mono text-slate-400 uppercase tracking-wider border-b border-slate-800/80 mb-1">
+                Pin Labels Display
+              </div>
+              {(
+                [
+                  { mode: 'auto', label: 'Auto (Smart)', desc: 'Show on hover & select' },
+                  { mode: 'all', label: 'All Labels', desc: 'Always show pin names' },
+                  { mode: 'numbers', label: 'Numbers Only', desc: 'Physical / GPIO numbers' },
+                  { mode: 'hidden', label: 'Hidden', desc: 'Clean schematic view' },
+                ] as const
+              ).map((opt) => (
+                <button
+                  key={opt.mode}
+                  onClick={() => setPinLabelMode(opt.mode)}
+                  className={`w-full text-left px-3 py-1.5 flex items-center justify-between transition ${
+                    currentPinLabelMode === opt.mode
+                      ? 'bg-cyan-500/20 text-cyan-300 font-medium'
+                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  }`}
+                >
+                  <div>
+                    <div className="font-semibold text-xs">{opt.label}</div>
+                    <div className="text-[10px] text-slate-400">{opt.desc}</div>
+                  </div>
+                  {currentPinLabelMode === opt.mode && <Check className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Right: Simulation, Save Status, Export & Share Actions */}

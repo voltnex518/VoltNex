@@ -10,6 +10,9 @@ import {
   Square,
   Activity,
   Zap,
+  X,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import type {
   CircuitData,
@@ -59,6 +62,7 @@ export const PropertiesInspector: React.FC<PropertiesInspectorProps> = ({
   isReadOnly = false,
 }) => {
   const [activeTab, setActiveTab] = useState<'properties' | 'simulation' | 'validation'>('properties');
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const selectedComp = data.components.find((c) => c.id === selectedComponentId);
   const selectedWire = data.wires.find((w) => w.id === selectedWireId);
@@ -128,47 +132,100 @@ export const PropertiesInspector: React.FC<PropertiesInspectorProps> = ({
     handleUpdateComponent({ rotation: (selectedComp.rotation + 90) % 360 });
   };
 
+  if (isCollapsed) {
+    return (
+      <aside className="w-11 h-full bg-slate-900 border-l border-slate-800 flex flex-col items-center py-3 select-none flex-shrink-0 z-20">
+        <button
+          onClick={() => setIsCollapsed(false)}
+          title="Expand Properties Inspector"
+          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        <div className="my-3 w-5 h-px bg-slate-800" />
+
+        {/* Selected badge */}
+        {selectedComp ? (
+          <button
+            onClick={() => setIsCollapsed(false)}
+            title={`Selected: ${selectedComp.reference} (${selectedComp.label})`}
+            className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 font-mono text-[10px] font-bold flex items-center justify-center border border-cyan-500/40"
+          >
+            {selectedComp.reference.slice(0, 3)}
+          </button>
+        ) : selectedWire ? (
+          <button
+            onClick={() => setIsCollapsed(false)}
+            title="Wire selected"
+            className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 font-mono text-[10px] font-bold flex items-center justify-center border border-blue-500/40"
+          >
+            W
+          </button>
+        ) : null}
+
+        {/* Simulation status dot */}
+        {isSimulating && (
+          <div
+            title="Simulation active"
+            className="mt-3 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"
+          />
+        )}
+      </aside>
+    );
+  }
+
   return (
     <aside className="w-80 h-full bg-slate-900 border-l border-slate-800 flex flex-col flex-shrink-0 text-slate-300 select-none">
-      {/* Tabs Header */}
-      <div className="flex items-center border-b border-slate-800 p-1.5 bg-slate-950/60">
+      {/* Tabs Header & Collapse Button */}
+      <div className="flex items-center justify-between border-b border-slate-800 p-1.5 bg-slate-950/60 gap-1">
+        <div className="flex items-center flex-1 gap-1">
+          <button
+            onClick={() => setActiveTab('properties')}
+            className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition ${
+              activeTab === 'properties'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Inspector
+          </button>
+          <button
+            onClick={() => setActiveTab('simulation')}
+            className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition relative ${
+              activeTab === 'simulation'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Simulation
+            {isSimulating && (
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 absolute top-2 right-2 animate-ping" />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('validation')}
+            className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition relative ${
+              activeTab === 'validation'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Audit
+            {simulationState.warnings.length > 0 && (
+              <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 text-[10px] ml-1">
+                {simulationState.warnings.length}
+              </span>
+            )}
+          </button>
+        </div>
+
         <button
-          onClick={() => setActiveTab('properties')}
-          className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition ${
-            activeTab === 'properties'
-              ? 'bg-slate-800 text-cyan-400 shadow-sm'
-              : 'text-slate-400 hover:text-white'
-          }`}
+          onClick={() => setIsCollapsed(true)}
+          title="Collapse Panel (Maximize canvas workspace)"
+          className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition"
         >
-          Inspector
-        </button>
-        <button
-          onClick={() => setActiveTab('simulation')}
-          className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition relative ${
-            activeTab === 'simulation'
-              ? 'bg-slate-800 text-cyan-400 shadow-sm'
-              : 'text-slate-400 hover:text-white'
-          }`}
-        >
-          Simulation
-          {isSimulating && (
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 absolute top-2 right-2 animate-ping" />
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab('validation')}
-          className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition relative ${
-            activeTab === 'validation'
-              ? 'bg-slate-800 text-cyan-400 shadow-sm'
-              : 'text-slate-400 hover:text-white'
-          }`}
-        >
-          Audit
-          {simulationState.warnings.length > 0 && (
-            <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 text-[10px] ml-1">
-              {simulationState.warnings.length}
-            </span>
-          )}
+          <ChevronRight className="w-4 h-4" />
         </button>
       </div>
 
@@ -187,31 +244,40 @@ export const PropertiesInspector: React.FC<PropertiesInspectorProps> = ({
                     </span>
                     <h3 className="text-sm font-bold text-white mt-0.5">{selectedComp.label}</h3>
                   </div>
-                  {!isReadOnly && (
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={handleRotate}
-                        title="Rotate 90° (R)"
-                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
-                      >
-                        <RotateCw className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={handleDuplicateComponent}
-                        title="Duplicate"
-                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
-                      >
-                        <Copy className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={handleDeleteSelected}
-                        title="Delete (Del)"
-                        className="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 transition"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  )}
+                  <div className="flex items-center gap-1">
+                    {!isReadOnly && (
+                      <>
+                        <button
+                          onClick={handleRotate}
+                          title="Rotate 90° (R)"
+                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
+                        >
+                          <RotateCw className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={handleDuplicateComponent}
+                          title="Duplicate (Ctrl+D)"
+                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={handleDeleteSelected}
+                          title="Delete (Del)"
+                          className="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 transition"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </>
+                    )}
+                    <button
+                      onClick={() => onSelectComponent(null)}
+                      title="Deselect (Esc)"
+                      className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition ml-0.5"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Reference Designator & Label */}
@@ -327,27 +393,89 @@ export const PropertiesInspector: React.FC<PropertiesInspectorProps> = ({
                   </div>
                 )}
 
-                {/* Connected Pins Summary */}
+                {/* Connected Pins Netlist Table */}
                 <div className="pt-2 border-t border-slate-800">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
-                    Pin Configuration ({selectedDef.pins.length})
-                  </span>
-                  <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+                      Pinout Netlist ({selectedDef.pins.length})
+                    </span>
+                    <span className="text-[10px] font-mono text-cyan-400">
+                      {data.wires.filter(w => w.fromComponentId === selectedComp.id || w.toComponentId === selectedComp.id).length} Connected
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
                     {selectedDef.pins.map((pin) => {
-                      const hasWire = data.wires.some(
+                      const connectedWire = data.wires.find(
                         (w) =>
                           (w.fromComponentId === selectedComp.id && w.fromPinId === pin.id) ||
                           (w.toComponentId === selectedComp.id && w.toPinId === pin.id)
                       );
+
+                      let targetInfo: string | null = null;
+                      if (connectedWire) {
+                        const isFrom = connectedWire.fromComponentId === selectedComp.id && connectedWire.fromPinId === pin.id;
+                        const otherCompId = isFrom ? connectedWire.toComponentId : connectedWire.fromComponentId;
+                        const otherPinId = isFrom ? connectedWire.toPinId : connectedWire.fromPinId;
+                        const otherComp = data.components.find((c) => c.id === otherCompId);
+                        targetInfo = otherComp ? `${otherComp.reference} (${otherPinId})` : otherPinId;
+                      }
+
                       return (
                         <div
                           key={pin.id}
-                          className="flex items-center justify-between px-2.5 py-1 rounded bg-slate-950/80 text-[11px] font-mono"
+                          className="p-1.5 rounded bg-slate-950/80 border border-slate-800/60 text-[11px] font-mono space-y-1"
                         >
-                          <span className="text-slate-300 font-semibold">{pin.name}</span>
-                          <span className={hasWire ? 'text-emerald-400 text-[10px]' : 'text-slate-500 text-[10px]'}>
-                            {hasWire ? 'Connected' : 'NC (Floating)'}
-                          </span>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5">
+                              {pin.physicalNumber && (
+                                <span className="text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-400">
+                                  #{pin.physicalNumber}
+                                </span>
+                              )}
+                              <span className="text-white font-semibold">{pin.name}</span>
+                              {pin.gpio !== undefined && (
+                                <span className="text-[9px] text-cyan-400 font-normal">
+                                  GPIO{pin.gpio}
+                                </span>
+                              )}
+                            </div>
+
+                            <span
+                              className={`text-[9px] px-1.5 py-0.5 rounded font-mono uppercase ${
+                                pin.type === 'power'
+                                  ? 'bg-rose-500/20 text-rose-300'
+                                  : pin.type === 'ground'
+                                  ? 'bg-slate-800 text-slate-300'
+                                  : pin.type === 'analog'
+                                  ? 'bg-amber-500/20 text-amber-300'
+                                  : pin.type === 'digital'
+                                  ? 'bg-cyan-500/20 text-cyan-300'
+                                  : 'bg-indigo-500/20 text-indigo-300'
+                              }`}
+                            >
+                              {pin.type}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-[10px] pt-0.5 border-t border-slate-900">
+                            {connectedWire ? (
+                              <span className="flex items-center gap-1 text-emerald-400">
+                                <span
+                                  className="w-2 h-2 rounded-full inline-block"
+                                  style={{ backgroundColor: connectedWire.color || '#10B981' }}
+                                />
+                                <span>Linked to {targetInfo}</span>
+                              </span>
+                            ) : (
+                              <span className="text-slate-500">NC (Floating)</span>
+                            )}
+                            {pin.description && (
+                              <span className="text-slate-400 truncate max-w-[130px]" title={pin.description}>
+                                {pin.description}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       );
                     })}
@@ -364,15 +492,24 @@ export const PropertiesInspector: React.FC<PropertiesInspectorProps> = ({
                     </span>
                     <h3 className="text-sm font-bold text-white mt-0.5">Wire Segment</h3>
                   </div>
-                  {!isReadOnly && (
+                  <div className="flex items-center gap-1">
+                    {!isReadOnly && (
+                      <button
+                        onClick={handleDeleteSelected}
+                        title="Delete Wire (Del)"
+                        className="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 transition"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                     <button
-                      onClick={handleDeleteSelected}
-                      title="Delete Wire"
-                      className="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 transition"
+                      onClick={() => onSelectWire(null)}
+                      title="Deselect (Esc)"
+                      className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition ml-0.5"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
-                  )}
+                  </div>
                 </div>
 
                 {/* Routing Style */}

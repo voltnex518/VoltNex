@@ -11,6 +11,8 @@ export type ComponentCategory =
 
 export type PinType = 'power' | 'ground' | 'digital' | 'analog' | 'passive' | 'signal';
 
+export type PinLabelMode = 'auto' | 'all' | 'numbers' | 'hidden';
+
 export interface CircuitPin {
   id: string;
   name: string;
@@ -18,6 +20,9 @@ export interface CircuitPin {
   y: number;
   type: PinType;
   description?: string;
+  physicalNumber?: number | string;
+  gpio?: number | string;
+  aliases?: string[];
 }
 
 export interface CircuitComponentDefinition {
@@ -75,6 +80,7 @@ export interface CircuitDataSettings {
   gridSnap: boolean;
   showGrid: boolean;
   wireRouting: WireRoutingStyle;
+  pinLabelMode?: PinLabelMode;
 }
 
 export interface CircuitData {

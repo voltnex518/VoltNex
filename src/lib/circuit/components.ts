@@ -18,110 +18,142 @@ export const COMPONENT_DEFINITIONS: CircuitComponentDefinition[] = [
     id: 'arduino_uno',
     name: 'Arduino Uno R3',
     category: 'microcontrollers',
-    description: 'ATmega328P microcontroller with 14 digital pins, 6 analog inputs, and 5V power.',
+    description: 'ATmega328P 8-bit AVR microcontroller development board with 14 digital I/O pins, 6 analog inputs, 16MHz clock, and 5V operating rail.',
     symbolType: 'mcu_board',
-    width: 220,
-    height: 160,
+    width: 280,
+    height: 200,
     defaultRefPrefix: 'U',
     defaultProperties: { model: 'Uno R3', clock: '16MHz', vcc: 5 },
     pins: [
-      // Top row (Digital & GND)
-      { id: 'd0', name: 'D0/RX', x: 20, y: 0, type: 'digital', description: 'Serial RX' },
-      { id: 'd1', name: 'D1/TX', x: 32, y: 0, type: 'digital', description: 'Serial TX' },
-      { id: 'd2', name: 'D2', x: 44, y: 0, type: 'digital' },
-      { id: 'd3', name: 'D3~', x: 56, y: 0, type: 'digital', description: 'PWM' },
-      { id: 'd4', name: 'D4', x: 68, y: 0, type: 'digital' },
-      { id: 'd5', name: 'D5~', x: 80, y: 0, type: 'digital', description: 'PWM' },
-      { id: 'd6', name: 'D6~', x: 92, y: 0, type: 'digital', description: 'PWM' },
-      { id: 'd7', name: 'D7', x: 104, y: 0, type: 'digital' },
-      { id: 'd8', name: 'D8', x: 124, y: 0, type: 'digital' },
-      { id: 'd9', name: 'D9~', x: 136, y: 0, type: 'digital', description: 'PWM' },
-      { id: 'd10', name: 'D10~', x: 148, y: 0, type: 'digital', description: 'PWM / SS' },
-      { id: 'd11', name: 'D11~', x: 160, y: 0, type: 'digital', description: 'PWM / MOSI' },
-      { id: 'd12', name: 'D12', x: 172, y: 0, type: 'digital', description: 'MISO' },
-      { id: 'd13', name: 'D13', x: 184, y: 0, type: 'digital', description: 'SCK / Built-in LED' },
-      { id: 'gnd_top', name: 'GND', x: 196, y: 0, type: 'ground' },
-      { id: 'aref', name: 'AREF', x: 208, y: 0, type: 'passive' },
-      // Bottom row (Power & Analog)
-      { id: 'ioref', name: 'IOREF', x: 20, y: 160, type: 'power' },
-      { id: 'reset', name: 'RESET', x: 32, y: 160, type: 'signal' },
-      { id: 'p3v3', name: '3.3V', x: 44, y: 160, type: 'power' },
-      { id: 'p5v', name: '5V', x: 56, y: 160, type: 'power' },
-      { id: 'gnd_bot1', name: 'GND', x: 68, y: 160, type: 'ground' },
-      { id: 'gnd_bot2', name: 'GND', x: 80, y: 160, type: 'ground' },
-      { id: 'vin', name: 'VIN', x: 92, y: 160, type: 'power' },
-      { id: 'a0', name: 'A0', x: 124, y: 160, type: 'analog' },
-      { id: 'a1', name: 'A1', x: 136, y: 160, type: 'analog' },
-      { id: 'a2', name: 'A2', x: 148, y: 160, type: 'analog' },
-      { id: 'a3', name: 'A3', x: 160, y: 160, type: 'analog' },
-      { id: 'a4', name: 'A4/SDA', x: 172, y: 160, type: 'analog', description: 'I2C SDA' },
-      { id: 'a5', name: 'A5/SCL', x: 184, y: 160, type: 'analog', description: 'I2C SCL' },
+      // Top header row (Digital & I2C)
+      { id: 'scl', name: 'SCL', x: 50, y: 15, type: 'signal', description: 'I2C Clock Line', aliases: ['SCL'], gpio: 'A5', physicalNumber: 1 },
+      { id: 'sda', name: 'SDA', x: 62, y: 15, type: 'signal', description: 'I2C Data Line', aliases: ['SDA'], gpio: 'A4', physicalNumber: 2 },
+      { id: 'aref', name: 'AREF', x: 74, y: 15, type: 'passive', description: 'Analog Reference Voltage', aliases: ['AREF'], physicalNumber: 3 },
+      { id: 'gnd_top', name: 'GND', x: 86, y: 15, type: 'ground', description: 'Digital Ground', aliases: ['GND'], physicalNumber: 4 },
+      { id: 'd13', name: 'D13', x: 98, y: 15, type: 'digital', description: 'SPI SCK / Built-in LED', aliases: ['SCK', 'LED_BUILTIN'], gpio: '13', physicalNumber: 5 },
+      { id: 'd12', name: 'D12', x: 110, y: 15, type: 'digital', description: 'SPI MISO (Master In Slave Out)', aliases: ['MISO'], gpio: '12', physicalNumber: 6 },
+      { id: 'd11', name: 'D11~', x: 122, y: 15, type: 'digital', description: 'PWM Timer2A / SPI MOSI', aliases: ['MOSI', 'PWM'], gpio: '11', physicalNumber: 7 },
+      { id: 'd10', name: 'D10~', x: 134, y: 15, type: 'digital', description: 'PWM Timer1B / SPI SS', aliases: ['SS', 'PWM'], gpio: '10', physicalNumber: 8 },
+      { id: 'd9', name: 'D9~', x: 146, y: 15, type: 'digital', description: 'PWM Timer1A', aliases: ['PWM'], gpio: '9', physicalNumber: 9 },
+      { id: 'd8', name: 'D8', x: 158, y: 15, type: 'digital', description: 'Digital I/O Pin 8', gpio: '8', physicalNumber: 10 },
+      // 14px authentic gap between D8 and D7
+      { id: 'd7', name: 'D7', x: 182, y: 15, type: 'digital', description: 'Digital I/O Pin 7', gpio: '7', physicalNumber: 11 },
+      { id: 'd6', name: 'D6~', x: 194, y: 15, type: 'digital', description: 'PWM Timer0A', aliases: ['PWM'], gpio: '6', physicalNumber: 12 },
+      { id: 'd5', name: 'D5~', x: 206, y: 15, type: 'digital', description: 'PWM Timer0B', aliases: ['PWM'], gpio: '5', physicalNumber: 13 },
+      { id: 'd4', name: 'D4', x: 218, y: 15, type: 'digital', description: 'Digital I/O Pin 4', gpio: '4', physicalNumber: 14 },
+      { id: 'd3', name: 'D3~', x: 230, y: 15, type: 'digital', description: 'PWM Timer2B / Ext Interrupt 1', aliases: ['PWM', 'INT1'], gpio: '3', physicalNumber: 15 },
+      { id: 'd2', name: 'D2', x: 242, y: 15, type: 'digital', description: 'Digital I/O / Ext Interrupt 0', aliases: ['INT0'], gpio: '2', physicalNumber: 16 },
+      { id: 'd1', name: 'D1/TX', x: 254, y: 15, type: 'digital', description: 'Serial Transmit (TXD)', aliases: ['TX'], gpio: '1', physicalNumber: 17 },
+      { id: 'd0', name: 'D0/RX', x: 266, y: 15, type: 'digital', description: 'Serial Receive (RXD)', aliases: ['RX'], gpio: '0', physicalNumber: 18 },
+
+      // Bottom header row (Power & Analog In)
+      { id: 'nc', name: 'NC', x: 62, y: 185, type: 'passive', description: 'Not Connected', physicalNumber: 19 },
+      { id: 'ioref', name: 'IOREF', x: 74, y: 185, type: 'power', description: 'I/O Reference Voltage (5V)', aliases: ['IOREF'], physicalNumber: 20 },
+      { id: 'reset', name: 'RESET', x: 86, y: 185, type: 'signal', description: 'Active-Low MCU Reset', aliases: ['RST'], physicalNumber: 21 },
+      { id: 'p3v3', name: '3.3V', x: 98, y: 185, type: 'power', description: '+3.3V Regulated Output (50mA max)', aliases: ['3V3'], physicalNumber: 22 },
+      { id: 'p5v', name: '5V', x: 110, y: 185, type: 'power', description: '+5.0V Main Power Rail', aliases: ['VCC', '5V'], physicalNumber: 23 },
+      { id: 'gnd_bot1', name: 'GND', x: 122, y: 185, type: 'ground', description: 'Power Ground Return 1', aliases: ['GND'], physicalNumber: 24 },
+      { id: 'gnd_bot2', name: 'GND', x: 134, y: 185, type: 'ground', description: 'Power Ground Return 2', aliases: ['GND'], physicalNumber: 25 },
+      { id: 'vin', name: 'VIN', x: 146, y: 185, type: 'power', description: 'Raw DC Input (7V - 12V)', aliases: ['VIN', 'RAW'], physicalNumber: 26 },
+
+      { id: 'a0', name: 'A0', x: 182, y: 185, type: 'analog', description: 'Analog Input 0 (10-bit ADC)', gpio: '14', physicalNumber: 27 },
+      { id: 'a1', name: 'A1', x: 194, y: 185, type: 'analog', description: 'Analog Input 1 (10-bit ADC)', gpio: '15', physicalNumber: 28 },
+      { id: 'a2', name: 'A2', x: 206, y: 185, type: 'analog', description: 'Analog Input 2 (10-bit ADC)', gpio: '16', physicalNumber: 29 },
+      { id: 'a3', name: 'A3', x: 218, y: 185, type: 'analog', description: 'Analog Input 3 (10-bit ADC)', gpio: '17', physicalNumber: 30 },
+      { id: 'a4', name: 'A4/SDA', x: 230, y: 185, type: 'analog', description: 'Analog In 4 / I2C SDA', aliases: ['SDA'], gpio: '18', physicalNumber: 31 },
+      { id: 'a5', name: 'A5/SCL', x: 242, y: 185, type: 'analog', description: 'Analog In 5 / I2C SCL', aliases: ['SCL'], gpio: '19', physicalNumber: 32 },
     ],
   },
   {
     id: 'esp32_devkit',
-    name: 'ESP32 DevKit V1',
+    name: 'ESP32 DevKit V1 (30-Pin)',
     category: 'microcontrollers',
-    description: 'Tensilica dual-core 240MHz SoC with built-in Wi-Fi & Bluetooth LE.',
+    description: 'Tensilica Xtensa Dual-Core 32-bit LX6 240MHz SoC with integrated 802.11 b/g/n Wi-Fi and Bluetooth 4.2 BR/EDR/BLE.',
     symbolType: 'mcu_board',
-    width: 200,
-    height: 150,
+    width: 250,
+    height: 180,
     defaultRefPrefix: 'U',
     defaultProperties: { model: 'ESP-WROOM-32', vcc: 3.3 },
     pins: [
-      { id: 'p3v3', name: '3V3', x: 15, y: 0, type: 'power' },
-      { id: 'en', name: 'EN', x: 32, y: 0, type: 'signal' },
-      { id: 'd36', name: 'VP/36', x: 49, y: 0, type: 'analog' },
-      { id: 'd39', name: 'VN/39', x: 66, y: 0, type: 'analog' },
-      { id: 'd34', name: 'D34', x: 83, y: 0, type: 'analog' },
-      { id: 'd35', name: 'D35', x: 100, y: 0, type: 'analog' },
-      { id: 'd32', name: 'D32', x: 117, y: 0, type: 'digital' },
-      { id: 'd33', name: 'D33', x: 134, y: 0, type: 'digital' },
-      { id: 'd25', name: 'D25', x: 151, y: 0, type: 'digital' },
-      { id: 'd26', name: 'D26', x: 168, y: 0, type: 'digital' },
-      { id: 'd27', name: 'D27', x: 185, y: 0, type: 'digital' },
-      // Bottom row
-      { id: 'gnd', name: 'GND', x: 15, y: 150, type: 'ground' },
-      { id: 'd13', name: 'D13', x: 32, y: 150, type: 'digital' },
-      { id: 'd12', name: 'D12', x: 49, y: 150, type: 'digital' },
-      { id: 'd14', name: 'D14', x: 66, y: 150, type: 'digital' },
-      { id: 'd2', name: 'D2', x: 83, y: 150, type: 'digital', description: 'Onboard LED' },
-      { id: 'd4', name: 'D4', x: 100, y: 150, type: 'digital' },
-      { id: 'd5', name: 'D5', x: 117, y: 150, type: 'digital' },
-      { id: 'd18', name: 'D18', x: 134, y: 150, type: 'digital', description: 'SPI SCK' },
-      { id: 'd19', name: 'D19', x: 151, y: 150, type: 'digital', description: 'SPI MISO' },
-      { id: 'd21', name: 'D21', x: 168, y: 150, type: 'digital', description: 'I2C SDA' },
-      { id: 'd22', name: 'D22', x: 185, y: 150, type: 'digital', description: 'I2C SCL' },
+      // Top header row (Pins 1 to 15)
+      { id: 'p3v3', name: '3V3', x: 30, y: 15, type: 'power', description: '+3.3V Regulated Rail', aliases: ['3V3'], physicalNumber: 1 },
+      { id: 'en', name: 'EN', x: 44, y: 15, type: 'signal', description: 'Chip Enable / Active-High Reset', aliases: ['RST'], physicalNumber: 2 },
+      { id: 'd36', name: 'VP', x: 58, y: 15, type: 'analog', description: 'GPIO36 / SENSOR_VP / ADC1_CH0', gpio: '36', physicalNumber: 3 },
+      { id: 'd39', name: 'VN', x: 72, y: 15, type: 'analog', description: 'GPIO39 / SENSOR_VN / ADC1_CH3', gpio: '39', physicalNumber: 4 },
+      { id: 'd34', name: 'D34', x: 86, y: 15, type: 'analog', description: 'GPIO34 / ADC1_CH6 (Input Only)', gpio: '34', physicalNumber: 5 },
+      { id: 'd35', name: 'D35', x: 100, y: 15, type: 'analog', description: 'GPIO35 / ADC1_CH7 (Input Only)', gpio: '35', physicalNumber: 6 },
+      { id: 'd32', name: 'D32', x: 114, y: 15, type: 'digital', description: 'GPIO32 / Touch9 / ADC1_CH4', gpio: '32', physicalNumber: 7 },
+      { id: 'd33', name: 'D33', x: 128, y: 15, type: 'digital', description: 'GPIO33 / Touch8 / ADC1_CH5', gpio: '33', physicalNumber: 8 },
+      { id: 'd25', name: 'D25', x: 142, y: 15, type: 'digital', description: 'GPIO25 / DAC1 / ADC2_CH8', gpio: '25', physicalNumber: 9 },
+      { id: 'd26', name: 'D26', x: 156, y: 15, type: 'digital', description: 'GPIO26 / DAC2 / ADC2_CH9', gpio: '26', physicalNumber: 10 },
+      { id: 'd27', name: 'D27', x: 170, y: 15, type: 'digital', description: 'GPIO27 / Touch7 / ADC2_CH7', gpio: '27', physicalNumber: 11 },
+      { id: 'd14', name: 'D14', x: 184, y: 15, type: 'digital', description: 'GPIO14 / Touch6 / HSPI_CLK', gpio: '14', physicalNumber: 12 },
+      { id: 'd12', name: 'D12', x: 198, y: 15, type: 'digital', description: 'GPIO12 / Touch5 / HSPI_MISO', gpio: '12', physicalNumber: 13 },
+      { id: 'd13', name: 'D13', x: 212, y: 15, type: 'digital', description: 'GPIO13 / Touch4 / HSPI_MOSI', gpio: '13', physicalNumber: 14 },
+      { id: 'gnd', name: 'GND', x: 226, y: 15, type: 'ground', description: 'Common Ground Return', aliases: ['GND'], physicalNumber: 15 },
+
+      // Bottom header row (Pins 16 to 30)
+      { id: 'vin', name: 'VIN', x: 30, y: 165, type: 'power', description: '5V USB / External Input Rail', aliases: ['5V', 'VBUS'], physicalNumber: 16 },
+      { id: 'gnd_bot', name: 'GND', x: 44, y: 165, type: 'ground', description: 'Ground Return 2', aliases: ['GND'], physicalNumber: 17 },
+      { id: 'd15', name: 'D15', x: 58, y: 165, type: 'digital', description: 'GPIO15 / Touch3 / HSPI_CS', gpio: '15', physicalNumber: 18 },
+      { id: 'd2', name: 'D2', x: 72, y: 165, type: 'digital', description: 'GPIO2 / Touch2 / Built-in Blue LED', gpio: '2', physicalNumber: 19 },
+      { id: 'd4', name: 'D4', x: 86, y: 165, type: 'digital', description: 'GPIO4 / Touch0 / ADC2_CH0', gpio: '4', physicalNumber: 20 },
+      { id: 'rx2', name: 'RX2', x: 100, y: 165, type: 'digital', description: 'GPIO16 / UART2 RX', gpio: '16', physicalNumber: 21 },
+      { id: 'tx2', name: 'TX2', x: 114, y: 165, type: 'digital', description: 'GPIO17 / UART2 TX', gpio: '17', physicalNumber: 22 },
+      { id: 'd5', name: 'D5', x: 128, y: 165, type: 'digital', description: 'GPIO5 / VSPI_CS', gpio: '5', physicalNumber: 23 },
+      { id: 'd18', name: 'D18', x: 142, y: 165, type: 'digital', description: 'GPIO18 / VSPI_SCK', gpio: '18', physicalNumber: 24 },
+      { id: 'd19', name: 'D19', x: 156, y: 165, type: 'digital', description: 'GPIO19 / VSPI_MISO', gpio: '19', physicalNumber: 25 },
+      { id: 'd21', name: 'D21', x: 170, y: 165, type: 'digital', description: 'GPIO21 / I2C SDA', aliases: ['SDA'], gpio: '21', physicalNumber: 26 },
+      { id: 'rx0', name: 'RX0', x: 184, y: 165, type: 'digital', description: 'GPIO3 / UART0 RX / Serial Debug', gpio: '3', physicalNumber: 27 },
+      { id: 'tx0', name: 'TX0', x: 198, y: 165, type: 'digital', description: 'GPIO1 / UART0 TX / Serial Debug', gpio: '1', physicalNumber: 28 },
+      { id: 'd22', name: 'D22', x: 212, y: 165, type: 'digital', description: 'GPIO22 / I2C SCL', aliases: ['SCL'], gpio: '22', physicalNumber: 29 },
+      { id: 'd23', name: 'D23', x: 226, y: 165, type: 'digital', description: 'GPIO23 / VSPI_MOSI', gpio: '23', physicalNumber: 30 },
     ],
   },
   {
     id: 'esp8266_nodemcu',
-    name: 'NodeMCU ESP8266',
+    name: 'NodeMCU ESP8266 (ESP-12E)',
     category: 'microcontrollers',
-    description: 'Compact 80MHz Wi-Fi development board for embedded IoT solutions.',
+    description: 'Compact 80MHz/160MHz 32-bit Wi-Fi development board with integrated TCP/IP stack and GPIO breakout.',
     symbolType: 'mcu_board',
-    width: 180,
-    height: 130,
+    width: 250,
+    height: 180,
     defaultRefPrefix: 'U',
     defaultProperties: { model: 'ESP-12E', vcc: 3.3 },
     pins: [
-      { id: 'a0', name: 'A0', x: 15, y: 0, type: 'analog' },
-      { id: 'd0', name: 'D0', x: 35, y: 0, type: 'digital' },
-      { id: 'd1', name: 'D1/SCL', x: 55, y: 0, type: 'digital' },
-      { id: 'd2', name: 'D2/SDA', x: 75, y: 0, type: 'digital' },
-      { id: 'd3', name: 'D3', x: 95, y: 0, type: 'digital' },
-      { id: 'd4', name: 'D4', x: 115, y: 0, type: 'digital' },
-      { id: 'p3v3_top', name: '3V3', x: 135, y: 0, type: 'power' },
-      { id: 'gnd_top', name: 'GND', x: 155, y: 0, type: 'ground' },
-      // Bottom
-      { id: 'd5', name: 'D5', x: 15, y: 130, type: 'digital' },
-      { id: 'd6', name: 'D6', x: 35, y: 130, type: 'digital' },
-      { id: 'd7', name: 'D7', x: 55, y: 130, type: 'digital' },
-      { id: 'd8', name: 'D8', x: 75, y: 130, type: 'digital' },
-      { id: 'rx', name: 'RX', x: 95, y: 130, type: 'digital' },
-      { id: 'tx', name: 'TX', x: 115, y: 130, type: 'digital' },
-      { id: 'gnd_bot', name: 'GND', x: 135, y: 130, type: 'ground' },
-      { id: 'vin', name: 'VIN', x: 155, y: 130, type: 'power' },
+      // Top header row (Pins 1 to 15)
+      { id: 'a0', name: 'A0', x: 30, y: 15, type: 'analog', description: 'ADC0 Analog Input (1.0V max)', gpio: 'A0', physicalNumber: 1 },
+      { id: 'rsv1', name: 'RSV', x: 44, y: 15, type: 'passive', description: 'Reserved Pin', physicalNumber: 2 },
+      { id: 'rsv2', name: 'RSV', x: 58, y: 15, type: 'passive', description: 'Reserved Pin', physicalNumber: 3 },
+      { id: 'sd3', name: 'SD3', x: 72, y: 15, type: 'digital', description: 'GPIO10 / SPI Flash', gpio: '10', physicalNumber: 4 },
+      { id: 'sd2', name: 'SD2', x: 86, y: 15, type: 'digital', description: 'GPIO9 / SPI Flash', gpio: '9', physicalNumber: 5 },
+      { id: 'sd1', name: 'SD1', x: 100, y: 15, type: 'digital', description: 'SPI MOSI Flash', physicalNumber: 6 },
+      { id: 'cmd', name: 'CMD', x: 114, y: 15, type: 'digital', description: 'SPI Chip Select', physicalNumber: 7 },
+      { id: 'sd0', name: 'SD0', x: 128, y: 15, type: 'digital', description: 'SPI MISO Flash', physicalNumber: 8 },
+      { id: 'clk', name: 'CLK', x: 142, y: 15, type: 'digital', description: 'SPI Clock Flash', physicalNumber: 9 },
+      { id: 'gnd_top', name: 'GND', x: 156, y: 15, type: 'ground', description: 'Ground Return', aliases: ['GND'], physicalNumber: 10 },
+      { id: 'p3v3_top', name: '3V3', x: 170, y: 15, type: 'power', description: '+3.3V Power Rail', aliases: ['3V3'], physicalNumber: 11 },
+      { id: 'en', name: 'EN', x: 184, y: 15, type: 'signal', description: 'Chip Enable (Active-High)', aliases: ['CH_PD'], physicalNumber: 12 },
+      { id: 'rst', name: 'RST', x: 198, y: 15, type: 'signal', description: 'Active-Low MCU Reset', aliases: ['RST'], physicalNumber: 13 },
+      { id: 'gnd_top2', name: 'GND', x: 212, y: 15, type: 'ground', description: 'Ground Return 2', aliases: ['GND'], physicalNumber: 14 },
+      { id: 'vin', name: 'VIN', x: 226, y: 15, type: 'power', description: '5V USB / DC In Power', aliases: ['VIN', '5V'], physicalNumber: 15 },
+
+      // Bottom header row (Pins 16 to 30)
+      { id: 'd0', name: 'D0', x: 30, y: 165, type: 'digital', description: 'GPIO16 / Deep Sleep Wake', gpio: '16', physicalNumber: 16 },
+      { id: 'd1', name: 'D1', x: 44, y: 165, type: 'digital', description: 'GPIO5 / I2C SCL', aliases: ['SCL'], gpio: '5', physicalNumber: 17 },
+      { id: 'd2', name: 'D2', x: 58, y: 165, type: 'digital', description: 'GPIO4 / I2C SDA', aliases: ['SDA'], gpio: '4', physicalNumber: 18 },
+      { id: 'd3', name: 'D3', x: 72, y: 165, type: 'digital', description: 'GPIO0 / Flash Mode Button', gpio: '0', physicalNumber: 19 },
+      { id: 'd4', name: 'D4', x: 86, y: 165, type: 'digital', description: 'GPIO2 / Built-in LED / Boot', gpio: '2', physicalNumber: 20 },
+      { id: 'p3v3', name: '3V3', x: 100, y: 165, type: 'power', description: '+3.3V Power Rail', aliases: ['3V3'], physicalNumber: 21 },
+      { id: 'gnd_bot', name: 'GND', x: 114, y: 165, type: 'ground', description: 'Ground Return', aliases: ['GND'], physicalNumber: 22 },
+      { id: 'd5', name: 'D5', x: 128, y: 165, type: 'digital', description: 'GPIO14 / SPI SCK', gpio: '14', physicalNumber: 23 },
+      { id: 'd6', name: 'D6', x: 142, y: 165, type: 'digital', description: 'GPIO12 / SPI MISO', gpio: '12', physicalNumber: 24 },
+      { id: 'd7', name: 'D7', x: 156, y: 165, type: 'digital', description: 'GPIO13 / SPI MOSI', gpio: '13', physicalNumber: 25 },
+      { id: 'd8', name: 'D8', x: 170, y: 165, type: 'digital', description: 'GPIO15 / SPI CS / Boot', gpio: '15', physicalNumber: 26 },
+      { id: 'rx', name: 'RX', x: 184, y: 165, type: 'digital', description: 'GPIO3 / UART0 RX / Flash', gpio: '3', physicalNumber: 27 },
+      { id: 'tx', name: 'TX', x: 198, y: 165, type: 'digital', description: 'GPIO1 / UART0 TX / Flash', gpio: '1', physicalNumber: 28 },
+      { id: 'gnd', name: 'GND', x: 212, y: 165, type: 'ground', description: 'Ground Return 3', aliases: ['GND'], physicalNumber: 29 },
+      { id: 'p3v3_bot', name: '3V3', x: 226, y: 165, type: 'power', description: '+3.3V Power Rail 2', aliases: ['3V3'], physicalNumber: 30 },
     ],
   },
 
@@ -582,6 +614,23 @@ export const COMPONENT_DEFINITIONS: CircuitComponentDefinition[] = [
       { id: 'scl', name: 'SCL', x: 115, y: 80, type: 'digital', description: 'I2C Clock' },
     ],
   },
+  {
+    id: 'gps_module',
+    name: 'NEO-6M GPS Module',
+    category: 'sensors',
+    description: 'High-performance u-blox NEO-6M satellite positioning receiver module with integrated ceramic patch antenna and serial UART.',
+    symbolType: 'gps',
+    width: 90,
+    height: 85,
+    defaultRefPrefix: 'GPS',
+    defaultProperties: { baudRate: 9600, satellites: 7, fixStatus: '3D Fix' },
+    pins: [
+      { id: 'vcc', name: 'VCC', x: 18, y: 85, type: 'power', description: '3.0V - 5.0V Power In', aliases: ['VCC', '3V3', '5V'], physicalNumber: 1 },
+      { id: 'rx', name: 'RX', x: 38, y: 85, type: 'digital', description: 'UART Receive (TTL)', aliases: ['RXD'], physicalNumber: 2 },
+      { id: 'tx', name: 'TX', x: 58, y: 85, type: 'digital', description: 'UART Transmit (TTL)', aliases: ['TXD'], physicalNumber: 3 },
+      { id: 'gnd', name: 'GND', x: 78, y: 85, type: 'ground', description: 'Ground Return', aliases: ['GND'], physicalNumber: 4 },
+    ],
+  },
 ];
 
 export function getComponentDefinition(typeId: string): CircuitComponentDefinition | undefined {
@@ -591,3 +640,29 @@ export function getComponentDefinition(typeId: string): CircuitComponentDefiniti
 export function getCategoryComponents(category: ComponentCategory): CircuitComponentDefinition[] {
   return COMPONENT_DEFINITIONS.filter((def) => def.category === category);
 }
+
+export function searchComponents(query: string, category: string = 'all'): CircuitComponentDefinition[] {
+  const cleanQ = query.trim().toLowerCase();
+  return COMPONENT_DEFINITIONS.filter((def) => {
+    const matchesCategory = category === 'all' || def.category === category;
+    if (!matchesCategory) return false;
+    if (!cleanQ) return true;
+
+    if (def.name.toLowerCase().includes(cleanQ)) return true;
+    if (def.category.toLowerCase().includes(cleanQ)) return true;
+    if (def.description.toLowerCase().includes(cleanQ)) return true;
+    if (def.defaultRefPrefix.toLowerCase().includes(cleanQ)) return true;
+
+    const matchesPin = def.pins.some((pin) => {
+      if (pin.name.toLowerCase().includes(cleanQ)) return true;
+      if (pin.id.toLowerCase().includes(cleanQ)) return true;
+      if (pin.gpio && pin.gpio.toString().toLowerCase().includes(cleanQ)) return true;
+      if (pin.description && pin.description.toLowerCase().includes(cleanQ)) return true;
+      if (pin.aliases && pin.aliases.some((a) => a.toLowerCase().includes(cleanQ))) return true;
+      return false;
+    });
+
+    return matchesPin;
+  });
+}
+
