@@ -19,6 +19,9 @@ import { ContactPage } from './pages/public/ContactPage';
 import { PrivacyPage } from './pages/public/PrivacyPage';
 import { TermsPage } from './pages/public/TermsPage';
 import { NotFoundPage } from './pages/public/NotFoundPage';
+import { CircuitsPage } from './pages/public/CircuitsPage';
+import { CircuitDetailPage } from './pages/public/CircuitDetailPage';
+import { CircuitBuilderPage } from './pages/circuit/CircuitBuilderPage';
 
 // Admin Pages
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
@@ -27,6 +30,8 @@ import { AdminProjectsPage } from './pages/admin/AdminProjectsPage';
 import { AdminProjectEditorPage } from './pages/admin/AdminProjectEditorPage';
 import { AdminTutorialsPage } from './pages/admin/AdminTutorialsPage';
 import { AdminResourcesPage } from './pages/admin/AdminResourcesPage';
+import { AdminCircuitsPage } from './pages/admin/AdminCircuitsPage';
+import { AdminCircuitEditorPage } from './pages/admin/AdminCircuitEditorPage';
 import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { AdminMessagesPage } from './pages/admin/AdminMessagesPage';
@@ -48,11 +53,16 @@ export const App: React.FC = () => {
         <DataProvider>
           <ToastProvider>
             <Routes>
+              {/* Standalone Fullscreen Circuit Studio Workspace */}
+              <Route path="/circuits/builder" element={<CircuitBuilderPage />} />
+
               {/* Public Website Routes */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+                <Route path="/circuits" element={<CircuitsPage />} />
+                <Route path="/circuits/:slug" element={<CircuitDetailPage />} />
                 <Route path="/tutorials" element={<TutorialsPage />} />
                 <Route path="/tutorials/:slug" element={<TutorialDetailPage />} />
                 <Route path="/resources" element={<ResourcesPage />} />
@@ -79,6 +89,9 @@ export const App: React.FC = () => {
                 <Route path="projects" element={<AdminProjectsPage />} />
                 <Route path="projects/new" element={<AdminProjectEditorPage />} />
                 <Route path="projects/edit/:id" element={<AdminProjectEditorPage />} />
+                <Route path="circuits" element={<AdminCircuitsPage />} />
+                <Route path="circuits/new" element={<AdminCircuitEditorPage />} />
+                <Route path="circuits/edit/:id" element={<AdminCircuitEditorPage />} />
                 <Route path="tutorials" element={<AdminTutorialsPage />} />
                 <Route path="resources" element={<AdminResourcesPage />} />
                 <Route path="categories" element={<AdminCategoriesPage />} />

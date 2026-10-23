@@ -17,6 +17,7 @@ import {
   FileArchive,
   FileText,
   ChevronRight,
+  Sparkles,
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { DifficultyBadge } from '../../components/common/Badge';
@@ -27,7 +28,7 @@ import { Button } from '../../components/common/Button';
 
 export const ProjectDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { getProjectBySlug, projects, recordDownload } = useData();
+  const { getProjectBySlug, projects, circuits, recordDownload } = useData();
   const navigate = useNavigate();
   const [copiedLink, setCopiedLink] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'circuit' | 'code' | 'steps' | 'downloads'>('overview');
@@ -258,6 +259,34 @@ export const ProjectDetailPage: React.FC = () => {
             {/* TAB: CIRCUIT & WIRING */}
             {activeTab === 'circuit' && (
               <div className="space-y-6">
+                {/* Interactive Circuit Studio Link Banner */}
+                <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border border-blue-500/30 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                      <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
+                        Circuit Studio Integration
+                      </span>
+                    </div>
+                    <h4 className="text-base font-bold text-white">Interactive Schematic & Pinout Sandbox</h4>
+                    <p className="text-xs text-slate-300">
+                      Simulate logic states, test component connections, or fork this design into your visual workspace.
+                    </p>
+                  </div>
+                  <Link
+                    to={
+                      circuits.find((c) => c.slug.includes(project.slug) || project.slug.includes(c.slug))
+                        ? `/circuits/${circuits.find((c) => c.slug.includes(project.slug) || project.slug.includes(c.slug))!.slug}`
+                        : '/circuits'
+                    }
+                  >
+                    <Button variant="primary" size="sm" className="whitespace-nowrap shadow-md shadow-cyan-500/20">
+                      <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                      <span>Explore In Circuit Studio</span>
+                    </Button>
+                  </Link>
+                </div>
+
                 {project.circuit_diagram_url ? (
                   <CircuitViewer
                     imageUrl={project.circuit_diagram_url}

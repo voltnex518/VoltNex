@@ -9,6 +9,7 @@ import {
   ArrowUpRight,
   Database,
   Settings,
+  Zap,
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
@@ -17,7 +18,7 @@ import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/Badge';
 
 export const AdminOverviewPage: React.FC = () => {
-  const { projects, tutorials, resources, messages } = useData();
+  const { projects, tutorials, resources, circuits, messages } = useData();
   const { isDemoMode, user } = useAuth();
   const [dbStatus, setDbStatus] = useState<{ ok: boolean; message: string } | null>(null);
 
@@ -40,11 +41,19 @@ export const AdminOverviewPage: React.FC = () => {
       link: '/admin/projects',
     },
     {
+      title: 'Circuit Blueprints',
+      value: circuits.length,
+      subtext: `${circuits.filter((c) => c.status === 'published').length} Published • Studio Active`,
+      icon: Zap,
+      color: 'text-cyan-600 bg-cyan-50 border-cyan-200/80',
+      link: '/admin/circuits',
+    },
+    {
       title: 'Published Tutorials',
       value: tutorials.filter((t) => t.status === 'published').length,
       subtext: `${tutorials.length} total authored`,
       icon: BookOpen,
-      color: 'text-cyan-600 bg-cyan-50 border-cyan-200/80',
+      color: 'text-indigo-600 bg-indigo-50 border-indigo-200/80',
       link: '/admin/tutorials',
     },
     {

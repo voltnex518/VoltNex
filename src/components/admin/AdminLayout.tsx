@@ -3,6 +3,7 @@ import { NavLink, Link, useNavigate, Outlet } from 'react-router-dom';
 import {
   LayoutDashboard,
   Cpu,
+  Zap,
   BookOpen,
   FolderDown,
   Tags,
@@ -33,6 +34,7 @@ export const AdminLayout: React.FC = () => {
   const menuItems = [
     { name: 'Overview', path: '/admin', icon: LayoutDashboard, end: true },
     { name: 'Projects', path: '/admin/projects', icon: Cpu, end: false },
+    { name: 'Circuits', path: '/admin/circuits', icon: Zap, end: false },
     { name: 'Tutorials', path: '/admin/tutorials', icon: BookOpen, end: false },
     { name: 'Resources & Files', path: '/admin/resources', icon: FolderDown, end: false },
     { name: 'Categories', path: '/admin/categories', icon: Tags, end: false },

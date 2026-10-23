@@ -141,6 +141,14 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/circuits" className="hover:text-white transition flex items-center gap-1.5">
+                  <span>Circuit Studio</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/60 font-semibold">
+                    Interactive
+                  </span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/tutorials" className="hover:text-white transition">
                   Tutorials & Guides
                 </Link>

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import type { Project, Category, Tutorial, Resource, SiteSettings, ContactSubmission } from '../types';
+import type { Project, Category, Tutorial, Resource, SiteSettings, ContactSubmission, Circuit } from '../types';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import {
   INITIAL_CATEGORIES,
@@ -9,12 +9,14 @@ import {
   INITIAL_SITE_SETTINGS,
   INITIAL_MESSAGES,
 } from '../data/mockData';
+import { INITIAL_CIRCUITS } from '../data/mockCircuits';
 
 interface DataContextType {
   projects: Project[];
   categories: Category[];
   tutorials: Tutorial[];
   resources: Resource[];
+  circuits: Circuit[];
   settings: SiteSettings;
   messages: ContactSubmission[];
   isLoading: boolean;
@@ -26,6 +28,13 @@ interface DataContextType {
   saveProject: (project: Partial<Project>) => Promise<{ success: boolean; data?: Project; error?: string }>;
   deleteProject: (id: string) => Promise<{ success: boolean; error?: string }>;
   toggleProjectPublish: (id: string) => Promise<{ success: boolean; error?: string }>;
+
+  // Circuit CRUD
+  getCircuitBySlug: (slug: string) => Circuit | undefined;
+  saveCircuit: (circuit: Partial<Circuit>) => Promise<{ success: boolean; data?: Circuit; error?: string }>;
+  deleteCircuit: (id: string) => Promise<{ success: boolean; error?: string }>;
+  toggleCircuitPublish: (id: string) => Promise<{ success: boolean; error?: string }>;
+  toggleCircuitFeatured: (id: string) => Promise<{ success: boolean; error?: string }>;
 
   // Category CRUD
   saveCategory: (category: Partial<Category>) => Promise<{ success: boolean; data?: Category; error?: string }>;
@@ -57,6 +66,7 @@ const STORAGE_KEYS = {
   CATEGORIES: 'voltnex_db_categories',
   TUTORIALS: 'voltnex_db_tutorials',
   RESOURCES: 'voltnex_db_resources',
+  CIRCUITS: 'voltnex_db_circuits',
   SETTINGS: 'voltnex_db_settings',
   MESSAGES: 'voltnex_db_messages',
 };
@@ -66,6 +76,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [categories, setCategories] = useState<Category[]>([]);
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
+  const [circuits, setCircuits] = useState<Circuit[]>([]);
   const [settings, setSettings] = useState<SiteSettings>(INITIAL_SITE_SETTINGS);
   const [messages, setMessages] = useState<ContactSubmission[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -84,6 +95,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           categoriesRes,
           tutorialsRes,
           resourcesRes,
+          circuitsRes,
           settingsRes,
           messagesRes,
         ] = await Promise.allSettled([
@@ -101,6 +113,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           supabase.from('categories').select('*').order('display_order', { ascending: true }),
           supabase.from('tutorials').select('*').order('created_at', { ascending: false }),
           supabase.from('resources').select('*').order('created_at', { ascending: false }),
+          supabase.from('circuits').select('*').order('created_at', { ascending: false }),
           supabase.from('site_settings').select('*').eq('id', 'global').maybeSingle(),
           supabase.from('contact_submissions').select('*').order('created_at', { ascending: false }),
         ]);
@@ -121,6 +134,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         if (resourcesRes.status === 'fulfilled' && resourcesRes.value.data) {
           setResources(resourcesRes.value.data);
+        }
+        if (circuitsRes.status === 'fulfilled' && circuitsRes.value.data && circuitsRes.value.data.length > 0) {
+          setCircuits(circuitsRes.value.data);
+        } else {
+          // Fall back to local/seed if table empty or not yet migrated
+          const storedCircuits = localStorage.getItem(STORAGE_KEYS.CIRCUITS);
+          setCircuits(storedCircuits ? JSON.parse(storedCircuits) : INITIAL_CIRCUITS);
         }
         if (settingsRes.status === 'fulfilled' && settingsRes.value.data) {
           const loadedSettings = settingsRes.value.data;
@@ -146,6 +166,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const storedProjects = localStorage.getItem(STORAGE_KEYS.PROJECTS);
       const storedTutorials = localStorage.getItem(STORAGE_KEYS.TUTORIALS);
       const storedResources = localStorage.getItem(STORAGE_KEYS.RESOURCES);
+      const storedCircuits = localStorage.getItem(STORAGE_KEYS.CIRCUITS);
       const storedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
       const storedMessages = localStorage.getItem(STORAGE_KEYS.MESSAGES);
 
@@ -153,6 +174,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setProjects(storedProjects ? JSON.parse(storedProjects) : INITIAL_PROJECTS);
       setTutorials(storedTutorials ? JSON.parse(storedTutorials) : INITIAL_TUTORIALS);
       setResources(storedResources ? JSON.parse(storedResources) : INITIAL_RESOURCES);
+      setCircuits(storedCircuits ? JSON.parse(storedCircuits) : INITIAL_CIRCUITS);
       setSettings(storedSettings ? JSON.parse(storedSettings) : INITIAL_SITE_SETTINGS);
       setMessages(storedMessages ? JSON.parse(storedMessages) : INITIAL_MESSAGES);
     } catch {
@@ -160,6 +182,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setProjects(INITIAL_PROJECTS);
       setTutorials(INITIAL_TUTORIALS);
       setResources(INITIAL_RESOURCES);
+      setCircuits(INITIAL_CIRCUITS);
       setSettings(INITIAL_SITE_SETTINGS);
       setMessages(INITIAL_MESSAGES);
     }
@@ -601,6 +624,128 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // --- CIRCUITS ---
+  const getCircuitBySlug = useCallback(
+    (slug: string) => {
+      return circuits.find((c) => c.slug === slug);
+    },
+    [circuits]
+  );
+
+  const saveCircuit = async (
+    circuitData: Partial<Circuit>
+  ): Promise<{ success: boolean; data?: Circuit; error?: string }> => {
+    const isNew = !circuitData.id;
+    const now = new Date().toISOString();
+    const id = circuitData.id || (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `c_${Date.now()}`);
+    const slug = (circuitData.slug || circuitData.title || '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, '');
+
+    const fullCircuit: Circuit = {
+      id,
+      title: circuitData.title || 'Untitled Circuit',
+      slug,
+      description: circuitData.description || '',
+      category: circuitData.category || 'Arduino',
+      difficulty: circuitData.difficulty || 'Beginner',
+      estimated_build_minutes: circuitData.estimated_build_minutes || 30,
+      cover_image_path: circuitData.cover_image_path || '',
+      circuit_data: circuitData.circuit_data || {
+        version: 1,
+        components: [],
+        wires: [],
+        viewport: { x: 0, y: 0, zoom: 1 },
+        settings: { gridSnap: true, showGrid: true, wireRouting: 'orthogonal' },
+      },
+      instructions: circuitData.instructions || '',
+      safety_notes: circuitData.safety_notes || '',
+      status: circuitData.status || 'draft',
+      featured: circuitData.featured ?? false,
+      created_at: circuitData.created_at || now,
+      updated_at: now,
+      published_at: circuitData.status === 'published' ? (circuitData.published_at || now) : undefined,
+    };
+
+    if (isSupabaseConfigured() && supabase) {
+      try {
+        const payload: any = {
+          title: fullCircuit.title,
+          slug: fullCircuit.slug,
+          description: fullCircuit.description,
+          category: fullCircuit.category,
+          difficulty: fullCircuit.difficulty,
+          estimated_build_minutes: fullCircuit.estimated_build_minutes,
+          cover_image_path: fullCircuit.cover_image_path,
+          circuit_data: fullCircuit.circuit_data,
+          instructions: fullCircuit.instructions,
+          safety_notes: fullCircuit.safety_notes,
+          status: fullCircuit.status,
+          featured: fullCircuit.featured,
+          updated_at: now,
+          published_at: fullCircuit.published_at,
+        };
+        if (!isNew) {
+          payload.id = fullCircuit.id;
+        }
+        const { data, error: upsertErr } = await supabase
+          .from('circuits')
+          .upsert(payload)
+          .select()
+          .single();
+
+        if (upsertErr) {
+          console.warn('Supabase circuit upsert error, syncing local store:', upsertErr.message);
+        } else if (data) {
+          fullCircuit.id = data.id;
+        }
+      } catch (err: unknown) {
+        console.warn('Supabase circuit upsert exception:', err);
+      }
+    }
+
+    const updated = isNew
+      ? [fullCircuit, ...circuits]
+      : circuits.map((c) => (c.id === fullCircuit.id ? fullCircuit : c));
+
+    setCircuits(updated);
+    syncLocal(STORAGE_KEYS.CIRCUITS, updated);
+    return { success: true, data: fullCircuit };
+  };
+
+  const deleteCircuit = async (id: string): Promise<{ success: boolean; error?: string }> => {
+    if (isSupabaseConfigured() && supabase) {
+      try {
+        const { error: delErr } = await supabase.from('circuits').delete().eq('id', id);
+        if (delErr) {
+          console.warn('Supabase circuit delete error:', delErr.message);
+        }
+      } catch (err: unknown) {
+        console.warn('Supabase circuit delete exception:', err);
+      }
+    }
+
+    const updated = circuits.filter((c) => c.id !== id);
+    setCircuits(updated);
+    syncLocal(STORAGE_KEYS.CIRCUITS, updated);
+    return { success: true };
+  };
+
+  const toggleCircuitPublish = async (id: string): Promise<{ success: boolean; error?: string }> => {
+    const circ = circuits.find((c) => c.id === id);
+    if (!circ) return { success: false, error: 'Circuit not found' };
+    const newStatus = circ.status === 'published' ? 'draft' : 'published';
+    return saveCircuit({ ...circ, status: newStatus });
+  };
+
+  const toggleCircuitFeatured = async (id: string): Promise<{ success: boolean; error?: string }> => {
+    const circ = circuits.find((c) => c.id === id);
+    if (!circ) return { success: false, error: 'Circuit not found' };
+    return saveCircuit({ ...circ, featured: !circ.featured });
+  };
+
   // --- SETTINGS ---
   const updateSettings = async (newSettings: Partial<SiteSettings>): Promise<{ success: boolean; error?: string }> => {
     const updated: SiteSettings = {
@@ -690,6 +835,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         categories,
         tutorials,
         resources,
+        circuits,
         settings,
         messages,
         isLoading,
@@ -699,6 +845,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         saveProject,
         deleteProject,
         toggleProjectPublish,
+        getCircuitBySlug,
+        saveCircuit,
+        deleteCircuit,
+        toggleCircuitPublish,
+        toggleCircuitFeatured,
         saveCategory,
         deleteCategory,
         getTutorialBySlug,

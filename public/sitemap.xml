@@ -11,6 +11,26 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://voltnex.com/circuits</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://voltnex.com/circuits/interactive-9v-led-flasher-with-toggle-switch</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voltnex.com/circuits/esp32-weather-node-with-i2c-oled-dht11</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voltnex.com/circuits/arduino-obstacle-detection-dual-dc-motor-driver</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://voltnex.com/projects/esp32-epaper-weather-station</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
